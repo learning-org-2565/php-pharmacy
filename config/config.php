@@ -7,7 +7,7 @@ define('URL', 'https://pharmacy.softwarestore.biz/');
 
 /*Application Address*/
 define('DIR_ROUTE', 'index.php?route=');
-define('DIR', '/home/softwarestore22/public_html/pharmacy/');
+define('DIR', '/var/www/html/');
 define('DIR_APP', DIR.'app/');
 define('DIR_BUILDER', DIR.'builder/');
 define('DIR_VIEW', DIR_APP.'views/');
@@ -21,15 +21,15 @@ define('DIR_LANGUAGE', DIR_APP.'language/');
 
 /** MySQL settings - You can get this info from your web host **/
 /*MySQL database host*/
-define('DB_HOSTNAME', 'localhost');
+define('DB_HOSTNAME', getenv('DB_HOSTNAME') ?: 'pharmacy-db');
 /*MySQL database username*/
-define('DB_USERNAME', 'software_pharmacyuser22');
+define('DB_USERNAME', getenv('DB_USERNAME') ?: 'pharmacy_user');
 /*MySQL database password*/
-define('DB_PASSWORD', 'gM5vxSx6Qx}G');
+define('DB_PASSWORD', getenv('DB_PASSWORD') ?: 'pharmacy_secure_password');
 /*MySQL database Name*/
-define('DB_DATABASE', 'software_pharmacy22');
+define('DB_DATABASE', getenv('DB_DATABASE') ?: 'pharmacy_db');
 /*Table Prefix*/
-define('DB_PREFIX', 'ds_');
+define('DB_PREFIX', getenv('DB_PREFIX') ?: 'ds_');
 
 
 define('AUTH_KEY', 'BRQ(|eDdj&RSo&P;3tCJ>yh-5~49}exzb%0M(CX-jz%e4OCy|nj3-pgupyM{O%kG');
