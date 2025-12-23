@@ -46,7 +46,11 @@ echo [5/5] Checking database tables...
 docker exec pharmacy-db mysql -u pharmacy_user -ppharmacy_secure_password pharmacy_db -e "SHOW TABLES;" 2>nul | findstr ds_setting >nul
 if %ERRORLEVEL% NEQ 0 (
     echo [WARN] Database tables not found!
-    echo        Run 'init-database.cmd' to import the schema
+    echo.
+    echo        You need to run the installation wizard:
+    echo        http://localhost:8080/install/
+    echo.
+    echo        See SETUP-INSTRUCTIONS.md for details
 ) else (
     echo [OK] Database has tables
     echo.

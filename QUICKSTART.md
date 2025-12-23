@@ -22,10 +22,17 @@ Get your Pharmacy Management System running in 3 simple steps!
    - Check if Docker is running
    - Start all containers (PHP app, MySQL, phpMyAdmin)
    - Wait for database to be ready
-   - Automatically import the database schema
-   - Show you the URLs to access
+   - Check if installation is needed
+   - Show you the next steps
 
-3. **Access the application**:
+3. **Run the Installation Wizard** (First time only):
+   - Open browser to: http://localhost:8080/install/
+   - Follow the 3-step wizard:
+     - Step 1: Welcome screen
+     - Step 2: Database config + admin account
+     - Step 3: Success confirmation
+
+4. **Access the application**:
    - Main Application: http://localhost:8080
    - Database Admin (phpMyAdmin): http://localhost:8000
 
@@ -39,11 +46,12 @@ docker-compose up -d
 
 # 2. Wait 30 seconds for database to initialize
 
-# 3. Import database schema
-docker exec -i pharmacy-db mysql -u pharmacy_user -ppharmacy_secure_password pharmacy_db < install/builder/drugstore.sql
+# 3. Open browser and run installation wizard
+# Go to: http://localhost:8080/install/
+# Complete the 3-step setup form
 
-# 4. Verify tables were created
-docker exec pharmacy-db mysql -u pharmacy_user -ppharmacy_secure_password pharmacy_db -e "SHOW TABLES;"
+# 4. Verify installation succeeded
+docker exec pharmacy-db mysql -u pharmacy_user -ppharmacy_secure_password pharmacy_db -e "SHOW TABLES;" | findstr ds_setting
 ```
 
 ## Troubleshooting
@@ -53,14 +61,14 @@ docker exec pharmacy-db mysql -u pharmacy_user -ppharmacy_secure_password pharma
 - Wait for the Docker icon in system tray to show "running"
 - Try again
 
-### Database connection errors
+### Database connection errors or missing tables
 ```bash
 # Reset everything and start fresh
 docker-compose down -v
 docker-compose up -d
 
-# Wait 30 seconds, then run the database import script
-init-database.cmd
+# Wait 30 seconds, then run the installation wizard
+# Go to: http://localhost:8080/install/
 ```
 
 ### Port already in use

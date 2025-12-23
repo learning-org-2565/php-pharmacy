@@ -28,30 +28,43 @@ echo Step 3: Waiting for database to be ready (15 seconds)...
 timeout /t 15 /nobreak >nul
 
 echo.
-echo Step 4: Checking if database tables exist...
+echo Step 4: Checking if installation is complete...
 docker exec pharmacy-db mysql -u pharmacy_user -ppharmacy_secure_password pharmacy_db -e "SHOW TABLES;" 2>nul | findstr ds_setting >nul
 
 if %ERRORLEVEL% NEQ 0 (
-    echo Database is empty. Importing schema...
-    docker exec -i pharmacy-db mysql -u pharmacy_user -ppharmacy_secure_password pharmacy_db < install\builder\drugstore.sql
-    if %ERRORLEVEL% EQU 0 (
-        echo Database imported successfully!
-    ) else (
-        echo WARNING: Database import may have failed. Check logs.
-    )
+    echo.
+    echo ============================================
+    echo INSTALLATION REQUIRED
+    echo ============================================
+    echo.
+    echo The database is not initialized yet.
+    echo.
+    echo IMPORTANT: You MUST run the installation wizard!
+    echo.
+    echo Open your browser and go to:
+    echo.
+    echo    http://localhost:8080/install/
+    echo.
+    echo Follow the 3-step installation wizard to:
+    echo   - Configure database connection
+    echo   - Set up pharmacy information
+    echo   - Create admin account
+    echo.
+    echo See SETUP-INSTRUCTIONS.md for detailed steps.
+    echo.
 ) else (
-    echo Database already has tables. Skipping import.
+    echo Installation complete! Database tables found.
+    echo.
+    echo ============================================
+    echo Pharmacy Application is ready!
+    echo ============================================
+    echo.
+    echo Access the application at:
+    echo - Application: http://localhost:8080
+    echo - phpMyAdmin: http://localhost:8000
+    echo.
 )
 
-echo.
-echo ============================================
-echo Pharmacy Application is ready!
-echo ============================================
-echo.
-echo Access the application at:
-echo - Application: http://localhost:8080
-echo - phpMyAdmin: http://localhost:8000
-echo.
 echo To view logs: docker-compose logs -f
 echo To stop: docker-compose down
 echo.
