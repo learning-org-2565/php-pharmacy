@@ -39,12 +39,17 @@ class Database
 		return $arr;
 	}
 
-	public function query($query, $args = null) 
+	public function query($query, $args = null)
 	{
 		if (is_null($args)) {
 			$query = $this->obj->query($query);
+
+			if (!$query) {
+				throw new \Exception('Database query failed: ' . $this->obj->error . ' | Query: ' . $query);
+			}
+
 			$result = new \stdClass();
-			
+
 			$result->num_rows = $query->num_rows;
 			while ($row = $query->fetch_assoc()) {
 				$query_result[] = $row;

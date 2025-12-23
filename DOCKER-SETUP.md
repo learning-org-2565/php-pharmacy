@@ -31,7 +31,7 @@ This will:
 Once containers are running, access:
 
 - **Pharmacy Application**: http://localhost:8080
-- **phpMyAdmin**: http://localhost:8081
+- **phpMyAdmin**: http://localhost:8000
   - Username: `root`
   - Password: `root_password`
 
@@ -102,7 +102,7 @@ docker-compose down -v
    - Initialized with schema on first run
 
 3. **phpmyadmin** (Latest)
-   - Port: 8081
+   - Port: 8000
    - Web-based database management
    - Optional, can be removed if not needed
 
@@ -180,6 +180,22 @@ icacls .\public\uploads /grant Everyone:F
    ```
 
 3. Verify database host in config is `pharmacy-db` (not `localhost`)
+
+4. If you get errors about missing tables or "Call to member function on bool":
+   - The database might not have been initialized properly
+   - Check if the SQL import succeeded:
+     ```bash
+     docker-compose logs pharmacy-db | grep "init.sql"
+     ```
+   - Manually import the database schema:
+     ```bash
+     docker exec -i pharmacy-db mysql -u pharmacy_user -ppharmacy_secure_password pharmacy_db < install/builder/drugstore.sql
+     ```
+   - Or reset the database completely:
+     ```bash
+     docker-compose down -v
+     docker-compose up -d
+     ```
 
 ### Clear Everything and Start Fresh
 
@@ -300,6 +316,6 @@ For issues:
                                ▼
                         ┌──────────────────┐
                         │   phpmyadmin     │
-                        │   Port: 8081     │
+                        │   Port: 8000     │
                         └──────────────────┘
 ```
