@@ -150,6 +150,19 @@ After installation, your database will have these tables:
 
 ## Troubleshooting
 
+### Error: "Config files are not writable!"
+
+**Cause:** The installer cannot write to the config directory due to file permissions.
+
+**Solution:** Run this command on your server:
+```bash
+docker exec pharmacy-app chmod 777 /var/www/html/config/
+```
+
+Then refresh the installer page and proceed.
+
+See [FIX-PERMISSIONS.md](FIX-PERMISSIONS.md) for detailed solutions.
+
 ### Error: "Table 'pharmacy_db.ds_setting' doesn't exist"
 
 **Cause:** You accessed `http://localhost:8080` directly without running the installer.
