@@ -42,6 +42,7 @@ COPY . /var/www/html/
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
     && mkdir -p /var/www/html/public/uploads \
+    && mkdir -p /var/www/html/config \
     && chmod -R 777 /var/www/html/public/uploads \
     && chmod -R 777 /var/www/html/config \
     && touch /var/www/html/error.log \
