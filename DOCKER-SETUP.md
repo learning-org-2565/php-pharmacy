@@ -14,7 +14,12 @@ This guide will help you run the Pharmacy Management System using Docker and doc
 
 ### 1. Start the Application
 
-Open terminal/command prompt in the pharmacy directory and run:
+**Windows Users**: Simply run the automated script:
+```cmd
+start.cmd
+```
+
+**Manual Start**: Open terminal/command prompt in the pharmacy directory and run:
 
 ```bash
 docker-compose up -d
@@ -26,6 +31,8 @@ This will:
 - Start phpMyAdmin (optional)
 - Create a network for all services
 
+**Important**: If this is the first time running the application, you need to import the database schema (see step 3)
+
 ### 2. Access the Application
 
 Once containers are running, access:
@@ -35,20 +42,33 @@ Once containers are running, access:
   - Username: `root`
   - Password: `root_password`
 
-### 3. First Time Setup
+### 3. Initialize Database (First Time Only)
 
-When you first access http://localhost:8080, you'll be redirected to the installer:
+The database schema must be imported before the application will work. You have two options:
 
-1. Go through the installation wizard
-2. Use these database credentials:
-   - **Database Host**: `pharmacy-db`
-   - **Database Name**: `pharmacy_db`
-   - **Database Username**: `pharmacy_user`
-   - **Database Password**: `pharmacy_secure_password`
-   - **Table Prefix**: `ds_`
+**Option A - Automated (Windows)**:
+```cmd
+init-database.cmd
+```
 
-3. Complete the installation wizard
-4. Create your admin account
+**Option B - Manual**:
+```bash
+# Wait 15-30 seconds after starting containers for database to be ready
+# Then import the schema:
+docker exec -i pharmacy-db mysql -u pharmacy_user -ppharmacy_secure_password pharmacy_db < install/builder/drugstore.sql
+```
+
+**Verify the import**:
+```bash
+# Check if tables were created
+docker exec pharmacy-db mysql -u pharmacy_user -ppharmacy_secure_password pharmacy_db -e "SHOW TABLES;"
+```
+
+You should see tables like `ds_setting`, `ds_users`, etc.
+
+### 4. Access the Application
+
+After database initialization, access http://localhost:8080 and you should see the pharmacy application!
 
 ## Docker Commands
 
