@@ -7,7 +7,7 @@ A complete pharmacy management system with Docker support for easy deployment.
 ### 1. Start Docker Desktop
 Make sure Docker Desktop is installed and running.
 
-### 2. Run the Start Script script
+### 2. Run the Start Script
 ```cmd
 start.cmd
 ```
