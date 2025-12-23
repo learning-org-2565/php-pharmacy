@@ -1,0 +1,9 @@
+<?php
+
+
+/**
+ * security
+ */
+class Security
+{
+}

@@ -1,0 +1,71 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-12">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}role">User Roles</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<form action="{{ action }}" method="post">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<input type="hidden" name="_token" value="{{ common.token }}">
+			<input type="hidden" name="id" value="{{ result.id }}">
+			<div class="form-group">
+				<label class="col-form-label">User Role Name</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="las la-users-cog"></i></span>
+					</div>
+					<input type="text" name="name" class="form-control" value="{{ result.name }}" placeholder="Enter User Role Name . . .">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-form-label">Description</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="las la-paragraph"></i></span>
+					</div>
+					<textarea name="description" class="form-control" rows="3">{{ result.description }}</textarea>
+				</div>
+			</div>
+			<div class="mb-2">
+				<label class="col-form-label">Permission</label>
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped userrole-table table-middle">
+						<tbody>
+							{% for key, value in role %}
+								<tr>
+									<td>{{ key }}</td>
+									{% for sub_key, sub_value in value %}
+										<td>
+											{% if sub_value %}
+												<div class="custom-control custom-checkbox">
+													<input type="checkbox" class="custom-control-input" name="role[]" id="{{ sub_key }}" value="{{ sub_key }}" {% for s_role in role_selected %}
+													   {% if s_role == sub_key %}checked{% endif %}
+													{% endfor %}>
+													<label class="custom-control-label" for="{{ sub_key }}">{{ sub_value }}</label>
+												</div>
+											{% endif %}
+										</td>
+									{% endfor %}
+								</tr> 
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer text-center">
+			<button type="submit" name="submit" class="btn btn-primary"><i class="ti-save-alt pr-2"></i> Save</button>
+		</div>
+	</div>
+</form>
+{{ include('common/footer.twig') }}

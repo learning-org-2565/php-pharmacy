@@ -1,0 +1,69 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+    <div class="row align-items-center">
+        <div class="col-sm-12">
+            <h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+            <div class="breadcrumbs d-inline-block">
+                <ul>
+                    <li><a href="{{ common.info.url }}">Dashboard</a></li>
+                    <li>{{ page_title }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<form class="row" action="{{ action }}" method="post">
+    <div class="col-lg-8">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <input type="hidden" name="_token" value="{{ common.token }}">
+                <div class="form-group">
+                    <label>User Type <span class="form-required">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend"><span class="input-group-text"><i class="las la-user"></i></span></div>
+                        <select name="receiver[user_type]" class="custom-select send-user-type" data-live-search="true" required>
+                            <option value="">Select User Type</option>
+                            {% for value in roles %}
+                                <option value="{{ value.id }}">{{ value.name }}</option>
+                            {% endfor %}
+                            <option value="customer">Customer</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Subject <span class="form-required">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend"><span class="input-group-text"><i class="las la-comment"></i></span></div>
+                        <input type="text" name="receiver[subject]" class="form-control" placeholder="Enter Subject . . ." required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Message</label>
+                    <textarea name="receiver[message]" class="summernote" required></textarea>
+                </div>
+            </div>
+            <div class="panel-footer text-center">
+                <button type="submit" name="submit" class="btn btn-primary"><i class="ti-save-alt pr-2"></i> Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-head">
+                <div class="panel-title">
+                    <i class="las la-user panel-head-icon"></i>
+                    <span class="panel-title-text">Select Receiver</span>
+                </div>
+                <div class="panel-action"></div>
+            </div>
+            <div class="panel-body">
+                <div class="receiver-container"></div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- include summernote css/js-->
+<link href="public/css/summernote-bs4.css" rel="stylesheet">
+<script type="text/javascript" src="public/js/summernote-bs4.min.js"></script>
+<script type="text/javascript" src="public/js/klinikal.summernote.js"></script>
+{{ include('common/footer.twig') }}

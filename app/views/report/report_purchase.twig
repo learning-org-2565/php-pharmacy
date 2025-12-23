@@ -1,0 +1,151 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+    <div class="row align-items-center">
+        <div class="col-sm-4">
+            <h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+            <div class="breadcrumbs d-inline-block">
+                <ul>
+                    <li><a href="{{ common.info.url }}">Dashboard</a></li>
+                    <li>{{ page_title }}</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-8 text-right">
+            <div class="btn btn-white btn-sm text-left mr-2">
+                <i class="las la-filter text-danger pr-2"></i>
+                <input type="text" class="table-date-range" data-start="{{ period.start|date(common.info.date_format) }}" data-end="{{ period.end|date(common.info.date_format) }}" data-route="reports&name=purchase">
+            </div>
+            <div class="dropdown d-inline-block mr-2">
+                <a class="btn btn-white btn-sm dropdown-toggle" data-toggle="dropdown"><i class="las la-cloud-download-alt text-primary pr-2"></i> Toggle column</a>
+                <ul class="dropdown-menu dropdown-menu-right toggle-button">
+                    <li><a href="#" data-column="0"><i class="las la-toggle-on pr-2"></i><span>#</span></a></li>
+                    <li><a href="#" data-column="1"><i class="las la-toggle-on pr-2"></i><span>Supplier</span></a></li>
+                    <li><a href="#" data-column="2"><i class="las la-toggle-on pr-2"></i><span>Amount</span></a></li>
+                    <li><a href="#" data-column="3"><i class="las la-toggle-on pr-2"></i><span>Tax</span></a></li>
+                    <li><a href="#" data-column="4"><i class="las la-toggle-on pr-2"></i><span>Discount</span></a></li>
+                    <li><a href="#" data-column="5"><i class="las la-toggle-on pr-2"></i><span>Purchase Date</span></a></li>
+                </ul>
+            </div>
+            <div class="dropdown d-inline-block mr-2">
+                <a class="btn btn-white btn-sm dropdown-toggle" data-toggle="dropdown"><i class="las la-cloud-download-alt text-primary pr-2"></i> Export</a>
+                <ul class="dropdown-menu dropdown-menu-right export-button">
+                    <li><a href="#" class="pdf"><i class="las la-file-pdf pr-2"></i>PDF</a></li>
+                    <li><a href="#" class="excel"><i class="las la-file-excel pr-2"></i>Excel</a></li>
+                    <li><a href="#" class="csv"><i class="las la-file-csv pr-2"></i>CSV</a></li>
+                    <li><a href="#" class="print"><i class="las la-print pr-2"></i>Print</a></li>
+                    <li><a href="#" class="copy"><i class="las la-copy pr-2"></i>Copy</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 col-lg-3">
+        <div class="panel panel-default">
+            <div class="widget-12">
+                <div class="row">
+                    <div class="col-7 text-left">
+                        <h3 class="text-primary m-0">{{ common.info.currency_abbr~purchase_stats.amount|number_format(2, '.', '') }}</h3>
+                        <h6>Amount</h6>
+                    </div>
+                    <div class="col-5 icon text-right"><i class="las la-money-check-alt text-primary"></i></div>
+                </div>
+                <div class="progress progress-lg mt-1">
+                    <div class="progress-bar progress-bar-striped progress-bar-primary" style="width:{{ purchase_stats.p_amount }}%">{{ purchase_stats.p_amount }}%</div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="widget-12">
+                <div class="row">
+                    <div class="col-7 text-left">
+                        <h3 class="text-info m-0">{{ common.info.currency_abbr~purchase_stats.tax|number_format(2, '.', '') }}</h3>
+                        <h6>Tax</h6>
+                    </div>
+                    <div class="col-5 icon text-right"><i class="las la-percent text-info"></i></div>
+                </div>
+                <div class="progress progress-lg mt-1">
+                    <div class="progress-bar progress-bar-striped progress-bar-info" style="width:{{ purchase_stats.p_tax }}%">{{ purchase_stats.p_tax }}%</div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="widget-12">
+                <div class="row">
+                    <div class="col-7 text-left">
+                        <h3 class="text-warning m-0">{{ common.info.currency_abbr~purchase_stats.discount|number_format(2, '.', '') }}</h3>
+                        <h6>Discount Amount</h6>
+                    </div>
+                    <div class="col-5 icon text-right"><i class="las la-money-check text-warning"></i></div>
+                </div>
+                <div class="progress progress-lg mt-1">
+                    <div class="progress-bar progress-bar-striped progress-bar-warning" style="width:{{ purchase_stats.p_discount }}%">{{ purchase_stats.p_discount }}%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 col-lg-9">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-primary">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#report-table" data-toggle="tab">Purchase</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#report-graph" data-toggle="tab">Summary</a>
+                    </li>
+                </ul>
+                <div class="tab-content pt-4">
+                    <div class="tab-pane" id="report-graph">
+                        <h5 class="mb-4">Last 12 Month Purchase</h5>
+                        <canvas id="report-purchase-chart" width="1000" height="400"></canvas>
+                    </div>
+                    <div class="tab-pane active" id="report-table">
+                        <div class="table-responsive">
+                            <table class="table table-middle table-bordered table-striped datatable-count-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Supplier</th>
+                                        <th>Tax</th>
+                                        <th>Discount</th>
+                                        <th>Amount</th>
+                                        <th>Purchase Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for value in result %}
+                                        <tr>
+                                            <td>{{ loop.index }}</td>
+                                            <td class="text-primary">{{ value.supplier }}</td>
+                                            <td>{{ common.info.currency_abbr~value.tax }}</td>
+                                            <td>{{ common.info.currency_abbr~value.discount_value }}</td>
+                                            <td>{{ common.info.currency_abbr~value.amount }}</td>
+                                            <td>{{ value.date|date(common.info.date_format) }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" class="report-purchase-chart-data" value="{{ purchase_chart|json_encode()|e }}">
+<link rel="stylesheet" href="public/css/chart.min.css">
+<script type="text/javascript" src="public/js/Chart.min.js"></script>
+<script type="text/javascript" src="public/js/dashboard.js"></script>
+{{ include('common/footer.twig') }}

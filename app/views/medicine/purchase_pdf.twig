@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Purchase</title>
+	<link rel="stylesheet" href="{{ info.url }}public/css/inv-pdf.css" type="text/css">
+</head>
+<body>
+	<div class="inv-template">
+		<div class="meta pl-30 pr-30" style="border-top: 0">
+			<table>
+				<tbody>
+					<tr>
+						<td class="bill-to v-aling-bottom">
+							<div class="heading">Supplier</div>
+							<div class="title">{{ result.name }}</div>
+							<div class="text">{{ result.email }}</div>
+							<div class="text">{{ result.mobile }}</div>
+						</td>
+						<td class="info v-aling-bottom">
+							<table class="text-right">
+								<tbody>
+									<tr>
+										<td class="text">#</td>
+										<td class="text w-min-130">{{ "%05d"|format(result.id) }}</td>
+									</tr>
+									<tr>
+										<td class="text">Purchase Date</td>
+										<td class="text w-min-130">{{ result.date|date(info.date_format) }}</td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="item pl-30 pr-30">
+			<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>BatchNo</th>
+						<th>Expiry Date</th>
+						<th>Packing Qty</th>
+						<th>Quantity</th>
+						<th>Purchase Price</th>
+						<th>SalePrice</th>
+						<th>Discount</th>
+						<th>Tax</th>
+						<th>Price</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for value in batches %}
+						<tr>
+							<td>{{ value.name }}</td>
+							<td>{{ value.batch }}</td>
+							<td>{{ value.expiry|date(info.date_my_format) }}</td>
+							<td>{{ value.pqty }}</td>
+							<td>{{ value.qty }}</td>
+							<td>{{ value.purchaseprice }}</td>
+							<td>{{ value.saleprice }}</td>
+							<td>{{ value.discountvalue }}</td>
+							<td>{{ value.taxprice }}</td>
+							<td>{{ value.price }}</td>
+						</tr>
+					{% endfor %}
+					<tr class="total">
+						<td rowspan="5" colspan="6" class="blank">
+						</td>
+						<td class="title" colspan="2">Sub Total</td>
+						<td class="value" colspan="2">{{ info.currency_abbr~result.total }}</td>
+					</tr>
+					<tr class="total">
+						<td class="title" colspan="2">Discount</td>
+						<td class="value" colspan="2">{{ info.currency_abbr~result.discount_value }}</td>
+					</tr>
+					<tr class="total">
+						<td class="title" colspan="2">Tax</td>
+						<td class="value" colspan="2">{{ info.currency_abbr~result.tax }}</td>
+					</tr>
+					<tr class="total">
+						<td class="title" colspan="2">Amount</td>
+						<td class="value" colspan="2">{{ info.currency_abbr~result.amount }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

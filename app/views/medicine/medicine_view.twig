@@ -1,0 +1,301 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-12">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}medicines">Medicine</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-4">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="user-avtar">
+					<span>{{ result.name|split('')[0] }}</span>
+				</div>
+				<div class="user-details text-center pt-3">
+					<h3>{{ result.name }}</h3>
+					<ul class="v-menu text-left pt-3 nav d-block">
+						<li><a href="#medicine-info" class="active" data-toggle="tab"><i class="las la-info-circle"></i> <span>Medicine Info</span></a></li>
+						<li><a href="#medicine-stock" data-toggle="tab"><i class="las la-pills"></i> <span>Live Stock</span></a></li>
+						<li><a href="#medicine-badstock" data-toggle="tab"><i class="las la-archive"></i> <span>Bad Stock</span></a></li>
+						{% if page_edit %}
+							<li><a href="{{ common.info.url_route~'medicine/edit&id='~result.id }}"><i class="las la-edit"></i> <span>Edit</span></a></li>
+						{% endif %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-8">
+		<div class="tab-content">
+			<div class="tab-pane fade show active" id="medicine-info">
+				<div class="panel panel-default">
+					<div class="panel-head">
+						<div class="panel-title">Medicine Info</div>
+					</div>
+					<div class="panel-body">
+						<div class="table-responsive">
+							<table class="table table-striped patient-table">
+								<tbody>
+									<tr>
+										<td>Medicine Name</td>
+										<td>{{ result.name }}</td>
+									</tr>
+									<tr>
+										<td>Company</td>
+										<td>{{ result.company }}</td>
+									</tr>
+									<tr>
+										<td>Generic</td>
+										<td>{{ result.generic }}</td>
+									</tr>
+									<tr>
+										<td>Unit</td>
+										<td>{{ result.unit }}</td>
+									</tr>
+									<tr>
+										<td>Unitpacking</td>
+										<td>{{ result.unitpacking }}</td>
+									</tr>
+									<tr>
+										<td>Medicine Group</td>
+										<td>{{ result.medicine_group }}</td>
+									</tr>
+									<tr>
+										<td>Category</td>
+										<td>{{ result.category_name }}</td>
+									</tr>
+									<tr>
+										<td>Store Box</td>
+										<td>{{ result.storebox }}</td>
+									</tr>
+									<tr>
+										<td>Min Level</td>
+										<td>{{ result.minlevel }}</td>
+									</tr>
+									<tr>
+										<td>Reorder Level</td>
+										<td>{{ result.reorderlevel }}</td>
+									</tr>
+									<tr>
+										<td>Note</td>
+										<td>{{ result.note }}</td>
+									</tr>
+									<tr>
+										<td>Created Date</td>
+										<td>{{ result.date_of_joining|date(common.info.date_format) }}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="medicine-stock">
+				<div class="panel panel-default">
+					<div class="panel-head">
+						<div class="panel-title">Live Stock</div>
+					</div>
+					<div class="panel-body">
+						<div class="table-responsive stock-table">
+							<table class="table table-middle table-bordered table-striped datatable-count-table">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Batch</th>
+										<th>Expiry</th>
+										<th>Purchase Price</th>
+										<th>Sale Price</th>
+										<th>Qty</th>
+										<th>Sold</th>
+										<th>Live Stock</th>
+										{% if page_purchase_view or page_purchase_edit or page_edit_stock or page_delete_stock %}
+											<th></th>
+										{% endif %}
+									</tr>
+								</thead>
+								<tbody>
+									{% for value in livestock %}
+										{% if value.status == '1' %}
+											<tr>
+												<td>{{ loop.index }}</td>
+												<td class="batch text-primary">{{ value.batch }}</td>
+												<td class="expiry text-danger">{{ value.expiry|date(common.info.date_my_format) }}</td>
+												<td>{{ common.info.currency_abbr~value.purchaseprice }}</td>
+												<td>{{ common.info.currency_abbr~value.saleprice }}</td>
+												<td class="qty">{{ value.qty }}</td>
+												<td class="sold">{{ value.sold }}</td>
+												<td class="available">{{ value.qty - value.sold }}</td>
+												{% if page_purchase_view or page_purchase_edit or page_edit_stock or page_delete_stock %}
+													<td class="table-action">
+														{% if page_purchase_view or page_purchase_edit or page_edit_stock %}
+															<div class="dropdown d-inline-block">
+																<a class="text-primary edit dropdown-toggle" data-toggle="dropdown"><i class="las la-ellipsis-h"></i></a>
+																<ul class="dropdown-menu dropdown-menu-right export-button">
+																	{% if page_edit_stock %}
+																		<li><a class="edit-stock" data-id="{{ value.id }}" data-medicineid="{{ value.medicine_id }}"><i class="ti-dashboard pr-2"></i>Update Stock</a></li>
+																	{% endif %}
+																	{% if page_purchase_view %}
+																		<li><a href="{{ common.info.url_route~'medicine/purchase/view&id='~value.purchase_id }}"><i class="las la-laptop pr-2"></i>Purchase View</a></li>
+																	{% endif %}
+																	{% if page_purchase_edit %}
+																		<li><a href="{{ common.info.url_route~'medicine/purchase/edit&id='~value.purchase_id }}"><i class="las la-edit pr-2"></i>Purchase Edit</a></li>	
+																	{% endif %}
+																</ul>
+															</div>
+														{% endif %}	
+														{% if page_delete_stock %}
+															<a class="table-delete text-danger delete" data-toggle="tooltip" title="Delete">
+																<i class="las la-trash-alt"></i><input type="hidden" value="{{ value.id }}">
+															</a>
+														{% endif %}
+													</td>
+												{% endif %}
+											</tr>
+										{% endif %}
+									{% endfor %}
+								</tbody>
+								<tfoot>
+									<tr>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										{% if page_purchase_view or page_purchase_edit or page_edit_stock or page_delete_stock %}
+											<th></th>
+										{% endif %}
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="medicine-badstock">
+				<div class="panel panel-default">
+					<div class="panel-head">
+						<div class="panel-title">Bad Stock</div>
+					</div>
+					<div class="panel-body">
+						<div class="table-responsive stock-table">
+							<table class="table table-middle table-bordered table-striped datatable-count-table">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Batch</th>
+										<th>Expiry</th>
+										<th>Purchase Price</th>
+										<th>Sale Price</th>
+										<th>Qty</th>
+										<th>Sold</th>
+										{% if page_delete_stock %}
+										<th></th>
+										{% endif %}
+									</tr>
+								</thead>
+								<tbody>
+									{% for value in badstock %}
+										{% if value.status == '1' %}
+											<tr>
+												<td>{{ loop.index }}</td>
+												<td class="batch text-primary">{{ value.batch }}</td>
+												<td class="expiry text-danger">{{ value.expiry|date(common.info.date_my_format) }}</td>
+												<td>{{ common.info.currency_abbr~value.purchaseprice }}</td>
+												<td>{{ common.info.currency_abbr~value.saleprice }}</td>
+												<td class="qty">{{ value.qty }}</td>
+												<td class="sold">{{ value.sold }}</td>
+												{% if page_delete_stock %}
+													<td class="table-action">
+														<a class="table-delete text-danger delete" data-toggle="tooltip" title="Delete"><i class="las la-trash-alt"></i><input type="hidden" value="{{ value.id }}"></a>
+													</td>
+												{% endif %}
+											</tr>
+										{% endif %}
+									{% endfor %}
+								</tbody>
+								<tfoot>
+									<tr>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										{% if page_delete_stock %}
+											<th></th>
+										{% endif %}
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="editstock-modal">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Stock Adjustment</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form action="{{ action }}" method="post">
+				<input type="hidden" name="_token" value="{{ common.token }}">
+				<input type="hidden" name="id" value="">
+				<input type="hidden" name="medicine_id" value="">
+				<div class="modal-body">
+					<div class="form-group">
+						<label>Available in Store<span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="ti-tag"></i></span></div>
+							<input type="text" name="available" class="form-control" required>
+						</div>
+						<span class="form-text">Sold quantity will be updated => Sold = Total - Available in store. <br>If you want to change qunatity or other info please click on edit link.</span>
+					</div>
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>Batch</th>
+								<th>Expiry</th>
+								<th>Qty</th>
+								<th>Sold</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="batch">Batch</td>
+								<td class="expiry">Expiry</td>
+								<td class="qty">Qty</td>
+								<td class="sold">Sold</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" name="submit" class="btn btn-primary">Update Stock</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% if page_delete_stock %}{{ include('common/delete_modal.twig') }}{% endif %}
+{{ include('common/footer.twig') }}

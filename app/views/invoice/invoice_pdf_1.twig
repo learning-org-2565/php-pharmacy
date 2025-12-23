@@ -1,0 +1,151 @@
+{% autoescape "html" %}
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Invoice</title>
+		<link rel="stylesheet" href="public/css/style-invoice.css" type="text/css">
+	</head>
+	<body>
+		<div class="inv-template">
+			<div class="company pl-30 pr-30">
+				<table>
+					<tbody>
+						<tr>
+							<td class="info">
+								<div class="logo"><img src="{{ info.url~info.logo }}" alt="logo"></div>
+								<div class="name">{{ info.legal_name }}</div>
+								<div class="text">{% if info.mail %}{{ info.mail }},{% endif %} {{ info.phone }}</div>
+								<div class="text">{{ info.address|join(', ') }}</div>
+							</td>
+							<td class="text-right">
+								<div class="title">Invoice</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="pl-30 pr-30">
+				<div class="meta">
+					<table>
+						<tbody>
+							<tr>
+								<td class="bill-to v-aling-bottom">
+									<div class="heading">Bill To</div>
+									<div class="title">{{ result.name }}</div>
+									<div class="text">{{ result.email }}</div>
+									<div class="text">{{ result.mobile }}</div>
+								</td>
+								<td class="info v-aling-bottom">
+									<table class="text-right">
+										<tbody>
+											<tr>
+												<td class="text">#</td>
+												<td class="text w-min-130">{{ info.invoice_prefix~"%05d"|format(result.id) }}</td>
+											</tr>
+											<tr>
+												<td class="text">Invoice Date</td>
+												<td class="text w-min-130">{{ result.invoicedate|date(info.date_format) }}</td>
+											</tr>
+											<tr>
+												<td class="text">Due Date</td>
+												<td class="text w-min-130">{{ result.duedate|date(info.date_format) }}</td>
+											</tr>
+											<tr>
+												<td class="text">Payment Method</td>
+												<td class="text w-min-130">{{ result.method }}</td>
+											</tr>
+											<tr>
+												<td class="text">Status</td>
+												<td class="text w-min-130">{{ result.status }}</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="pl-30 pr-30">
+				<div class="item">
+					<table>
+						<thead>
+							<tr>
+								<th>Item & description</th>
+								<th>Qty</th>
+								<th>Unit Cost</th>
+								<th>Discount</th>
+								<th>Tax</th>
+								<th>Price</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for value in result.items %}
+								<tr>
+									<td class="title">
+										<p>{{ value.name|raw }}</p>
+										<span>{{ value.descr|raw }}</span>
+									</td>
+									<td>{{ value.quantity }}</td>
+									<td>{{ info.currency_abbr~value.cost }}</td>
+									<td>{% if value.discountvalue %}{{ info.currency_abbr~value.discountvalue }}{% else %}0{% endif %}</td>
+									<td class="tax">
+										{% for tax in value.tax %}
+											<div><span>{{ info.currency_abbr~tax.tax_price }}</span><span> ({{ tax.name|raw }})</span></div>
+										{% endfor %}
+									</td>
+									<td>{{ info.currency_abbr~value.price }}</td>
+								</tr>
+							{% endfor %}
+							<tr class="total">
+								<td rowspan="6" colspan="4" class="blank"></td>
+								<td class="title">Sub Total</td>
+								<td class="value">{{ info.currency_abbr~result.subtotal }}</td>
+							</tr>
+							{% if result.discount_value > '0' %}
+								<tr class="total">
+									<td class="title">Discount</td>
+									<td class="value">{{ info.currency_abbr~result.discount_value }}</td>
+								</tr>
+							{% endif %}
+							<tr class="total">
+								<td class="title">Tax</td>
+								<td class="value">{{ info.currency_abbr~result.tax }}</td>
+							</tr>
+							<tr class="total">
+								<td class="title">Total</td>
+								<td class="value">{{ info.currency_abbr~result.amount }}</td>
+							</tr>
+							<tr class="total">
+								<td class="title">Paid</td>
+								<td class="value">{{ info.currency_abbr~result.paid }}</td>
+							</tr>
+							<tr class="total">
+								<td class="title">Due</td>
+								<td class="value">{{ info.currency_abbr~result.due }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="pl-30 pr-30">
+				<table class="note">
+					<tbody>
+						<tr>
+							<td class="block v-align-top">
+								<span>Customer Note</span>
+								<p>{{ result.note|raw }}</p>
+							</td>
+							<td class="block v-align-top">
+								<span>Terms & Conditions</span>
+								<p>{{ result.tc|raw }}</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</body>
+	</html>
+{% endautoescape %}

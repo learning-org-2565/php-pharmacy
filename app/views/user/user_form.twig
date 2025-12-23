@@ -1,0 +1,262 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-12">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}users">Users</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<form action="{{ action }}" method="post">
+	<input type="hidden" name="_token" value="{{ common.token }}">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<ul class="nav nav-tabs nav-tabs-line nav-tabs-line-primary">
+				<li class="nav-item">
+					<a class="nav-link active" href="#user-info" data-toggle="tab">Basic Info</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#user-address" data-toggle="tab">Address</a>
+				</li>
+			</ul>
+			<div class="tab-content pt-4">
+				<div class="tab-pane active" id="user-info">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>First Name <span class="form-required">*</span></label>
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<span class="input-group-text"><i class="las la-user"></i></span>
+											</div>
+											<input type="text" name="user[firstname]" class="form-control" value="{{ result.firstname }}" placeholder="Enter First Name . . ." required>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Last Name <span class="form-required">*</span></label>
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<span class="input-group-text"><i class="las la-user"></i></span>
+											</div>
+											<input type="text" name="user[lastname]" class="form-control" value="{{ result.lastname }}" placeholder="Enter Last Name . . ." required>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label>Email Address <span class="form-required">*</span></label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-envelope"></i></span>
+									</div>
+									<input type="text" name="user[mail]" class="form-control" value="{{ result.email }}" placeholder="Enter Email Address . . ." required >
+								</div>
+							</div>
+							<div class="form-group">
+								<label>Mobile Number <span class="form-required">*</span></label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-mobile"></i></span>
+									</div>
+									<input type="text" name="user[mobile]" class="form-control" value="{{ result.mobile }}" placeholder="Enter Mobile Number . . ." required>
+								</div>
+							</div>
+							<div class="form-group">
+								<label>Gender</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-genderless"></i></span>
+									</div>
+									<select name="user[gender]" class="custom-select">
+										<option value="Male" {{ result.gender == 'Male' ? 'selected' : false }}>Male</option>
+										<option value="Female" {{ result.gender == 'Female' ? 'selected' : false }}>Female</option>
+										<option value="Other" {{ result.gender == 'Other' ? 'selected' : false }}>Other</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="form-group pb-3">
+								<label class="d-block">Picture</label>
+								<div class="image-upload" {% if result.picture %}style="display:none"{% endif %}>
+									<a>Upload</a>
+								</div>
+								<div class="saved-picture" {% if result.picture is empty %}style="display:none"{% endif %}>
+									{% if result.picture %}
+										<img class="img-thumbnail" src="public/uploads/{{ result.picture }}" alt="">
+									{% endif %}
+									<input type="hidden" name="user[picture]" value="{{ result.picture }}">
+								</div>
+								<div class="saved-picture-delete" data-toggle="tooltip" data-placement="right" title="Remove" {% if result.picture is empty %}style="display:none"{% endif %}>
+									<a class="las la-trash-alt"></a>
+								</div>
+							</div>
+							<div class="form-group">
+								<label>Date of Birth</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-calendar"></i></span>
+									</div>
+									<input type="text" id="user-dob" name="user[dob]" class="form-control bg-white" value="{{ result.dob|date(common.info.date_format) }}" placeholder="Enter Date of Birth . . ." autocomplete="off" readonly>
+								</div>
+							</div>
+							<div class="form-group">
+								<label>Blood Group</label>
+								<div class="input-group">
+									<div class="input-group-prepend"><span class="input-group-text"><i class="las la-heartbeat"></i></span></div>
+									<select name="user[bloodgroup]" class="custom-select">
+										<option value="A+" {{ result.bloodgroup == "A+" ? 'selected' : false }}>A+</option>
+										<option value="A-" {{ result.bloodgroup == "A-" ? 'selected' : false }}>A-</option>
+										<option value="B+" {{ result.bloodgroup == "B+" ? 'selected' : false }}>B+</option>
+										<option value="B-" {{ result.bloodgroup == "B-" ? 'selected' : false }}>B-</option>
+										<option value="O+" {{ result.bloodgroup == "O+" ? 'selected' : false }}>O+</option>
+										<option value="O-" {{ result.bloodgroup == "O-" ? 'selected' : false }}>O-</option>
+										<option value="AB+" {{ result.bloodgroup == "AB+" ? 'selected' : false }}>AB+</option>
+										<option value="AB-" {{ result.bloodgroup == "AB-" ? 'selected' : false }}>AB-</option>
+									</select>
+								</div>
+							</div>
+							{% if result.user_id %}
+								<div class="form-group">
+									<label>Status</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text"><i class="las la-check-square"></i></span>
+										</div>
+										<select name="user[status]" class="custom-select">
+											<option value="1" {{ result.status == '1' ? 'selected' : false }}>Enabled</option>
+											<option value="0" {{ result.status == '0' ? 'selected' : false }}>Disabled</option>
+										</select>
+									</div>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+					<div class="dotted-seprator mt-4 mb-5"></div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>User Role <span class="form-required">*</span></label>
+								<div class="input-group">
+									<div class="input-group-prepend"><span class="input-group-text"><i class="las la-user-tag"></i></span></div>
+									<select name="user[user_role]" class="custom-select">
+										{% for value in roles %}
+											{% if value.id != '1' %}
+												<option value="{{ value.id }}" {{ value.id == result.user_role ? 'selected' : false }}>{{ value.name }}</option>
+											{% endif %}
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>User Name <span class="form-required">*</span></label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-address-card"></i></span>
+									</div>
+									<input type="text" name="user[user_name]" class="form-control" value="{{ result.user_name }}" placeholder="Enter User Name . . ." required>
+								</div>
+							</div>
+						</div>
+						{% if result.user_id is empty %}
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Password <span class="form-required">*</span></label>
+									<div class="input-group">
+										<div class="input-group-prepend"><span class="input-group-text"><i class="las la-key"></i></span></div>
+										<input type="password" name="user[password]" class="form-control" placeholder="Enter Password . . ." required="">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Confirm Password <span class="form-required">*</span></label>
+									<div class="input-group">
+										<div class="input-group-prepend"><span class="input-group-text"><i class="las la-key"></i></span></div>
+										<input type="password" name="user[cpassword]" class="form-control" placeholder="Enter Password . . ." required="">
+									</div>
+								</div>
+							</div>
+						{% endif %}
+					</div>
+				</div>
+				<div class="tab-pane" id="user-address">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Address Line 1</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-map-pin"></i></span>
+									</div>
+									<input type="text" name="user[address][address1]" class="form-control" value="{{ result.address.address1 }}" placeholder="Enter Address Line 1 . . .">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Address Line 2</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-map-pin"></i></span>
+									</div>
+									<input type="text" name="user[address][address2]" class="form-control" value="{{ result.address.address2 }}" placeholder="Enter Address Line 2 . . .">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>City</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-map-signs"></i></span>
+									</div>
+									<input type="text" name="user[address][city]" class="form-control" value="{{ result.address.city }}" placeholder="Enter City . . .">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Country</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-map-marker"></i></span>
+									</div>
+									<input type="text" name="user[address][country]" class="form-control" value="{{ result.address.country }}" placeholder="Enter Country . . .">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Postal/Zip Code</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-map"></i></span>
+									</div>
+									<input type="text" name="user[address][postal]" class="form-control" value="{{ result.address.postal }}" placeholder="Enter Postal/Zip Code . . .">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="user[user_id]" value="{{ result.user_id }}">
+		<div class="panel-footer text-center">
+			<button type="submit" name="submit" class="btn btn-primary"><i class="ti-save-alt pr-2"></i> Save</button>
+		</div>
+	</div>
+</form>
+{{ include('common/footer.twig') }}

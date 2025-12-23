@@ -1,0 +1,164 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-12">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}makepayment">Make Payment</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-4">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="user-avtar">
+					{% if staff.picture and staff.picture is ondisk %}
+						<img class="img-fluid img-thumbnail" src="public/uploads/{{ staff.picture }}">
+					{% else %}
+						<span>{{ staff.firstname|split('')[0] }}</span>
+					{% endif %}
+				</div>
+				<div class="user-details pt-2  pb-2 text-center">
+					<h2 class="font-20">{{ staff.firstname~' '~staff.lastname }}</h2>
+				</div>
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<tbody>
+							<tr>
+								<td>Email Address</td>
+								<td>{{ staff.email }}</td>
+							</tr>
+							<tr>
+								<td>Mobile No.</td>
+								<td>{{ staff.mobile }}</td>
+							</tr>
+							<tr>
+								<td>Gender</td>
+								<td>{{ staff.gender }}</td>
+							</tr>
+							<tr>
+								<td>Bloodgroup</td>
+								<td>{{ staff.bloodgroup }}</td>
+							</tr>
+							<tr>
+								<td>DOB</td>
+								<td> {% if staff.dob %}{{ staff.dob|date(common.info.date_format) }}{% endif %}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-8">
+		<div class="panel panel-default"> 
+			<form action="{{ action }}" method="post">
+				<input type="hidden" name="_token" value="{{ common.token }}">
+				<input type="hidden" class="staff_id" name="staff_id" value="{{ staff.user_id }}">
+				<input type="hidden" name="salarytemplate_id" value="{{ salary.id }}">
+				<div id="makepayment-container" class="panel-body pb-1">
+					<div class="row">
+						<div class="col-md-6 form-group">
+							<label>Month <span class="form-required">*</span></label>
+							<input type="text" name="month_year" class="form-control bg-white mon-payment datetimepicker-input" id="month" placeholder="Select Month" required readonly>
+						</div>
+						<div class="col-md-6 form-group">
+							<label>Gross Salary <span class="form-required">*</span></label>
+							<input type="text" name="gross_salary" class="form-control" value="{{ salary.gross_salary }}" readonly required>
+						</div>
+						<div class="col-md-6 form-group">
+							<label>Total Deduction</label>
+							<input type="text" name="total_deduction" class="form-control" value="{{ salary.total_deduction }}" readonly>
+						</div>
+						<div class="col-md-6 form-group">
+							<label>Net Salary <span class="form-required">*</span></label>
+							<input type="text" name="amount" class="form-control t-amount" value="{{ salary.net_salary }}" readonly  required>
+							<input type="hidden" name="net_salary" value="{{ salary.net_salary }}">
+						</div>
+						<div class="col-md-6 form-group">
+							<label>Advance</label>
+							<input type="text" name="advance" class="form-control t-advance">
+						</div>
+						<div class="col-md-6 form-group">
+							<label>Deduction</label>
+							<input type="text" name="deduction" class="form-control t-deduction">
+						</div>
+						<div class="col-md-6 form-group">
+							<label>Payment Amount <span class="form-required">*</span></label>
+							<input type="text" name="paid" class="form-control t-total" value="{{ salary.net_salary }}" required>
+						</div>
+						<div class="col-md-6 form-group">
+							<label>Payment Method <span class="form-required">*</span></label>
+							<select name="method" class="custom-select" required>
+								{% for value in methods %}
+									<option value="{{ value.id }}">{{ value.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="col-md-12 form-group">
+							<label>Comments</label>
+							<input type="text" name="comments" class="form-control" placeholder="Enter comments . . .">
+						</div>
+					</div>
+				</div>
+				<div class="panel-footer text-center">
+					<button type="submit" name="submit" class="btn btn-primary makepayment-submit" disabled><i class="ti-save-alt pr-2"></i> Save</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="panel panel-default"> 
+	<div class="panel-head">
+		<div class="panel-title">Payment History</div>
+	</div>
+	<div class="panel-body">
+		<table class="table table-middle table-bordered table-striped datatable-table">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Month</th>
+					<th>Date</th>
+					<th>Net Salary</th>
+					<th>Payment Amount</th>
+					{% if page_view or page_delete %}
+						<th></th>
+					{% endif %}
+				</tr>
+			</thead>
+			<tbody>
+				{% for value in history %}
+					<tr>
+						<td>{{ loop.index }}</td>
+						<td>{{ value.month_year|date(common.info.date_my_format) }}</td>
+						<td>{{ value.date_of_joining|date(common.info.date_format) }}</td>
+						<td>{{ common.info.currency_abbr~value.net_salary }}</td>
+						<td>{{ common.info.currency_abbr~value.amount }}</td>
+						{% if page_view or page_delete %}
+							<td class="table-action">
+								{% if page_view %}
+									<a href="{{ common.info.url_route~'managesalary/history/view&id='~value.id }}" class="text-info edit" data-toggle="tooltip" title="View"><i class="las la-laptop"></i></a>
+								{% endif %}
+								{% if page_delete %}
+									<a class="table-delete text-danger delete" data-toggle="tooltip" title="Delete"><i class="las la-trash-alt"></i><input type="hidden" value="{{ value.id }}"></a>
+								{% endif %}
+							</td>
+						{% endif %}
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+<style>.ui-datepicker-calendar { display: none; }</style>
+<link rel="stylesheet" href="public/css/bootstrap-datetimepicker.min.css">
+<script type="text/javascript" src="public/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="public/js/make-payment.js"></script>
+{% if page_delete %}{{ include('common/delete_modal.twig') }}{% endif %}
+	{{ include('common/footer.twig') }}

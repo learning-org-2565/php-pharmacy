@@ -1,0 +1,109 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+    <div class="row align-items-center">
+        <div class="col-sm-4">
+            <h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+            <div class="breadcrumbs d-inline-block">
+                <ul>
+                    <li><a href="{{ common.info.url }}">Dashboard</a></li>
+                    <li>{{ page_title }}</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-8 text-right">
+            <div class="dropdown d-inline-block mr-2">
+                <a class="btn btn-white btn-sm dropdown-toggle" data-toggle="dropdown"><i class="las la-cloud-download-alt text-primary pr-2"></i> Export</a>
+                <ul class="dropdown-menu dropdown-menu-right export-button">
+                    <li><a href="#" class="pdf"><i class="las la-file-pdf pr-2"></i>PDF</a></li>
+                    <li><a href="#" class="excel"><i class="las la-file-excel pr-2"></i>Excel</a></li>
+                    <li><a href="#" class="csv"><i class="las la-file-csv pr-2"></i>CSV</a></li>
+                    <li><a href="#" class="print"><i class="las la-print pr-2"></i>Print</a></li>
+                    <li><a href="#" class="copy"><i class="las la-copy pr-2"></i>Copy</a></li>
+                </ul>
+            </div>
+            {% if page_add %}
+                <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addTax"><i class="las la-plus pr-2"></i> New Tax</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Tax list page start -->
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-middle table-bordered table-striped datatable-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tax Name</th>
+                        <th>Rate(%)</th>
+                        {% if page_edit or page_delete %}
+                            <th></th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for value in result %}
+                        <tr> 
+                            <td>{{ loop.index }}</td>
+                            <td><a class="text-primary">{{ value.name }}</a></td>
+                            <td>{{ value.rate }}</td>
+                            {% if page_edit or page_delete %}
+                                <td class="table-action">
+                                    {% if page_edit %}
+                                        <a class="text-primary edit-tax" data-name="{{ value.name }}" data-rate="{{ value.rate }}" data-id="{{ value.id }}" data-toggle="tooltip" data-placement="top" title="Edit"><i class="las la-edit"></i></a>
+                                    {% endif %}
+                                    {% if page_delete %}
+                                        <a class="table-delete text-danger delete" data-toggle="tooltip" title="Delete">
+                                            <i class="las la-trash-alt"></i><input type="hidden" value="{{ value.id }}">
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% if page_edit or page_add %}
+    <!-- ADD EDIT MODAL -->
+    <div class="modal fade" id="addTax" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Tax Rate</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ action }}" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="col-form-label">Tax Name <span class="form-required">*</span></label>
+                            <div>
+                                <input type="text" class="form-control" name="name" placeholder="Enter Tax Rate Name . . ." required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Rate (%) <span class="form-required">*</span></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="rate" placeholder="Enter Tax Rate . . ."required>
+                                <div class="input-group-append"><span class="input-group-text">%</span></div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="id">
+                        <input type="hidden" name="_token" value="{{ common.token }}">
+                    </div>
+                    <div class="modal-footer text-center">
+                        <button type="submit" name="submit" class="btn btn-primary"><i class="ti-save-alt pr-2"></i> Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% if page_delete %}{{ include('common/delete_modal.twig') }}{% endif %}{{ include('common/footer.twig') }}

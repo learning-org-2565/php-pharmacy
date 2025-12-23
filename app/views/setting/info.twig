@@ -1,0 +1,322 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-12">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<form action="{{ action }}" method="post">
+	<input type="hidden" name="_token" value="{{ common.token }}">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<ul class="nav nav-tabs nav-tabs-line nav-tabs-line-primary">
+				<li class="nav-item">
+					<a class="nav-link active" href="#setting-info" data-toggle="tab">Basic Info</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#setting-address" data-toggle="tab">Address</a>
+				</li>
+			</ul>
+			<div class="tab-content pt-4">
+				<div class="tab-pane active" id="setting-info">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="row pb-2">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="d-block">Logo</label>
+										<div class="image-upload" {% if siteinfo.logo %}style="display:none"{% endif %}>
+											<a>Upload</a>
+										</div>
+										<div class="saved-picture" {% if siteinfo.logo is empty %}style="display:none"{% endif %}>
+											{% if siteinfo.logo %}
+												<img class="img-thumbnail" src="public/uploads/{{ siteinfo.logo }}" alt="">
+											{% endif %}
+											<input type="hidden" name="info[logo]" value="{{ siteinfo.logo }}">
+										</div>
+										<div class="saved-picture-delete" data-toggle="tooltip" data-placement="right" title="Remove" {% if siteinfo.logo is empty %}style="display:none"{% endif %}>
+											<a class="las la-trash-alt"></a>
+										</div>
+										<div class="form-text">This logo will be used on invoice, bill etc. Please use JPG format.</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="d-block">Favicon</label>
+										<div class="image-upload" {% if siteinfo.favicon %}style="display:none"{% endif %}>
+											<a>Upload</a>
+										</div>
+										<div class="saved-picture" {% if siteinfo.favicon is empty %}style="display:none"{% endif %}>
+											{% if siteinfo.favicon %}
+												<img class="img-thumbnail" src="public/uploads/{{ siteinfo.favicon }}" alt="">
+											{% endif %}
+											<input type="hidden" name="info[favicon]" value="{{ siteinfo.favicon }}">
+										</div>
+										<div class="saved-picture-delete" data-toggle="tooltip" data-placement="right" title="Remove" {% if siteinfo.favicon is empty %}style="display:none"{% endif %}>
+											<a class="las la-trash-alt"></a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label>Store Name <span class="form-required">*</span></label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-tag"></i></span>
+									</div>
+									<input type="text" name="info[name]" class="form-control" value="{{ siteinfo.name }}" placeholder="Enter Store Name . . ." required>
+								</div>
+							</div>
+							<div class="form-group">
+								<label>Store Legal Name <span class="form-required">*</span></label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-id-badge"></i></span>
+									</div>
+									<input type="text" name="info[legal_name]" class="form-control" value="{{ siteinfo.legal_name }}" placeholder="Enter Store Legal Name . . ." required>
+								</div>
+							</div>
+							<div class="form-group">
+								<label>Email Address <span class="form-required">*</span></label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-envelope"></i></span>
+									</div>
+									<input type="email" name="info[mail]" class="form-control" value="{{ siteinfo.mail }}" placeholder="Enter Email Address . . ." required>
+								</div>
+							</div>
+							<div class="form-group">
+								<label>Phone Number <span class="form-required">*</span></label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-mobile"></i></span>
+									</div>
+									<input type="text" name="info[phone]" class="form-control" value="{{ siteinfo.phone }}" placeholder="Enter Phone Number . . ." required>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Language</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-globe"></i></span>
+									</div>
+									<select name="info[language]" class="custom-select">
+										<option value="en" {{ siteinfo.language == 'en' ? 'selected' : false }}>English</option>
+										<option value="custom" {{ siteinfo.language == 'custom' ? 'selected' : false }}>Local Language</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label>Timezone</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-calendar"></i></span>
+									</div>
+									<select name="info[timezone]" class="custom-select">
+										{% for key, value in timezone %}
+											<option value="{{ key }}" {{ siteinfo.timezone == key ? 'selected' : false }}>{{ value }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label>Date Format</label>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<span class="input-group-text"><i class="las la-history"></i></span>
+											</div>
+											<select name="info[date_format]" class="custom-select">
+												<option value="d/m/Y" {{ siteinfo.date_format == 'd/m/Y' ? 'selected' : false }}>d/m/Y => {{ '2020-01-31'|date('d/m/Y') }}</option>
+												<option value="d.m.Y" {{ siteinfo.date_format == 'd.m.Y' ? 'selected' : false }}>d.m.Y => {{ '2020-01-31'|date('d.m.Y') }}</option>
+												<option value="d-m-Y" {{ siteinfo.date_format == 'd-m-Y' ? 'selected' : false }}>d-m-Y => {{ '2020-01-31'|date('d-m-Y') }}</option>
+												<option value="m/d/Y" {{ siteinfo.date_format == 'm/d/Y' ? 'selected' : false }}>m/d/Y => {{ '2020-01-31'|date('m/d/Y') }}</option>
+												<option value="m-d-Y" {{ siteinfo.date_format == 'm-d-Y' ? 'selected' : false }}>m-d-Y => {{ '2020-01-31'|date('m-d-Y') }}</option>
+												<option value="Y/m/d" {{ siteinfo.date_format == 'Y/m/d' ? 'selected' : false }}>Y/m/d => {{ '2020-01-31'|date('Y/m/d') }}</option>
+												<option value="Y-m-d" {{ siteinfo.date_format == 'Y-m-d' ? 'selected' : false }}>Y-m-d => {{ '2020-01-31'|date('Y-m-d') }}</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<span class="input-group-text"><i class="las la-history"></i></span>
+											</div>
+											<select name="info[date_my_format]" class="custom-select">
+												<option value="m-Y" {{ siteinfo.date_my_format == 'm-Y' ? 'selected' : false }}>m-Y => {{ '2020-01-31'|date('m-Y') }}</option>
+												<option value="m/Y" {{ siteinfo.date_my_format == 'm/Y' ? 'selected' : false }}>m/Y => {{ '2020-01-31'|date('m/Y') }}</option>
+												<option value="Y/m" {{ siteinfo.date_my_format == 'Y/m' ? 'selected' : false }}>Y/m => {{ '2020-01-31'|date('Y/m') }}</option>
+												<option value="Y-m" {{ siteinfo.date_my_format == 'Y-m' ? 'selected' : false }}>Y-m => {{ '2020-01-31'|date('Y-m') }}</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Currency Code</label>
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<span class="input-group-text"><i class="las la-history"></i></span>
+											</div>
+											<input type="text" name="info[currency]" class="form-control" value="{{ siteinfo.currency }}" placeholder="Currency Code . . .">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Currency Abbreviation</label>
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<span class="input-group-text"><i class="las la-history"></i></span>
+											</div>
+											<input type="text" name="info[currency_abbr]" class="form-control" value="{{ siteinfo.currency_abbr }}" placeholder="Currency Abbreviation . . .">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="dotted-seprator mt-3 mb-4"></div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Invoice Prefix</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-flag"></i></span>
+									</div>
+									<input type="text" name="info[invoice_prefix]" class="form-control" value="{{ siteinfo.invoice_prefix }}" placeholder="Enter Invoice Prefix . . .">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>Predefined Customer Note</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-flag"></i></span>
+									</div>
+									<textarea name="info[invoice_cnote]" class="form-control" placeholder="Invoice Predefined Customer Note">{{ siteinfo.invoice_cnote }}</textarea>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>Predefined Terms & Conditions</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-flag"></i></span>
+									</div>
+									<textarea name="info[invoice_tc]" class="form-control" placeholder="Invoice Terms & Conditions">{{ siteinfo.invoice_tc }}</textarea>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group invoice-template-img">
+								<label>Invoice Template</label>
+								<div>
+									<div class="custom-control custom-radio custom-radio-1 d-inline-block">
+										<input type="radio" name="info[invoice_template]" class="custom-control-input" value="1" id="invoice-template-1" {{ siteinfo.invoice_template == '1' ? 'checked' : false }}>
+										<label class="custom-control-label" for="invoice-template-1"><img src="public/images/invoice-1.png" alt="Invoice Template 1"></label>
+									</div>
+									<div class="custom-control custom-radio custom-radio-1 d-inline-block">
+										<input type="radio" name="info[invoice_template]" class="custom-control-input" value="2" id="invoice-template-2" {{ siteinfo.invoice_template == '2' ? 'checked' : false }}>
+										<label class="custom-control-label" for="invoice-template-2"><img src="public/images/invoice-2.png" alt="Invoice Template 2"></label>
+									</div>
+									<div class="custom-control custom-radio custom-radio-1 d-inline-block">
+										<input type="radio" name="info[invoice_template]" class="custom-control-input" value="3" id="invoice-template-3" {{ siteinfo.invoice_template == '3' ? 'checked' : false }}>
+										<label class="custom-control-label" for="invoice-template-3"><img src="public/images/invoice-3.png" alt="Invoice Template 3"></label>
+									</div>
+									<div class="custom-control custom-radio custom-radio-1 d-inline-block">
+										<input type="radio" name="info[invoice_template]" class="custom-control-input" value="4" id="invoice-template-4" {{ siteinfo.invoice_template == '4' ? 'checked' : false }}>
+										<label class="custom-control-label" for="invoice-template-4"><img src="public/images/invoice-4.png" alt="Invoice Template 4"></label>
+									</div>
+									<div class="custom-control custom-radio custom-radio-1 d-inline-block">
+										<input type="radio" name="info[invoice_template]" class="custom-control-input" value="5" id="invoice-template-5" {{ siteinfo.invoice_template == '5' ? 'checked' : false }}>
+										<label class="custom-control-label" for="invoice-template-5"><img src="public/images/invoice-5.png" alt="Invoice Template 5"></label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane" id="setting-address">
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>Address Line 1</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-map-pin"></i></span>
+									</div>
+									<input type="text" name="info[address][address1]" class="form-control" value="{{ siteinfo.address.address1 }}" placeholder="Enter Address Line 1 . . .">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>Address Line 2</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-map-pin"></i></span>
+									</div>
+									<input type="text" name="info[address][address2]" class="form-control" value="{{ siteinfo.address.address2 }}" placeholder="Enter Address Line 2 . . .">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>City</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-map-signs"></i></span>
+									</div>
+									<input type="text" name="info[address][city]" class="form-control" value="{{ siteinfo.address.city }}" placeholder="Enter City . . .">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Country</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-map-marker"></i></span>
+									</div>
+									<input type="text" name="info[address][country]" class="form-control" value="{{ siteinfo.address.country }}" placeholder="Enter Country . . .">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Postal/ZIP Code</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-map"></i></span>
+									</div>
+									<input type="text" name="info[address][postal]" class="form-control" value="{{ siteinfo.address.postal }}" placeholder="Enter Postal/ZIP Code . . .">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer text-center">
+			<button type="submit" name="submit" class="btn btn-primary"><i class="ti-save-alt pr-2"></i> Save</button>
+		</div>
+	</div>
+</form>
+<!-- Footer -->
+{{ include('common/footer.twig') }}

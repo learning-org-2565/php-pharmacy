@@ -1,0 +1,17 @@
+[04-Aug-2020 08:43:33 Asia/Calcutta] PHP Notice:  Undefined index: discounttype in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 185
+[04-Aug-2020 08:43:33 Asia/Calcutta] PHP Notice:  Undefined index: discount in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 185
+[04-Aug-2020 12:14:27 Asia/Calcutta] PHP Notice:  Undefined index: discounttype in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 253
+[04-Aug-2020 12:14:27 Asia/Calcutta] PHP Notice:  Undefined index: discount in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 253
+[04-Aug-2020 12:22:37 Asia/Calcutta] PHP Notice:  Undefined index: discounttype in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 263
+[04-Aug-2020 12:22:37 Asia/Calcutta] PHP Notice:  Undefined index: discount in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 263
+[04-Aug-2020 12:22:37 Asia/Calcutta] PHP Notice:  Undefined index: discountvalue in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 263
+[04-Aug-2020 12:23:08 Asia/Calcutta] PHP Notice:  Undefined index: discounttype in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 263
+[04-Aug-2020 12:23:08 Asia/Calcutta] PHP Notice:  Undefined index: discount in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 263
+[04-Aug-2020 12:23:08 Asia/Calcutta] PHP Notice:  Undefined index: discountvalue in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 263
+[04-Aug-2020 12:23:18 Asia/Calcutta] PHP Notice:  Undefined index: discounttype in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 264
+[04-Aug-2020 12:23:18 Asia/Calcutta] PHP Notice:  Undefined index: discount in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 264
+[04-Aug-2020 12:23:18 Asia/Calcutta] PHP Notice:  Undefined index: discountvalue in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 264
+[04-Aug-2020 12:24:17 Asia/Calcutta] PHP Notice:  Undefined index: discounttype in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 265
+[04-Aug-2020 12:24:17 Asia/Calcutta] PHP Notice:  Undefined index: discount in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 265
+[04-Aug-2020 12:24:17 Asia/Calcutta] PHP Notice:  Undefined index: discountvalue in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 265
+[04-Aug-2020 12:32:13 Asia/Calcutta] PHP Notice:  Trying to get property 'num_rows' of non-object in C:\xampp\htdocs\drugstore\app\http\models\Medicine.php on line 274

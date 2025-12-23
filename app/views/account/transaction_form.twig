@@ -1,0 +1,123 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-6">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="#">Home</a></li>
+					<li><a href="{{ common.info.url_route }}account/transactions">Transactions</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-sm-6 text-right">
+		</div>
+	</div>
+</div>
+
+<form action="{{ action }}" method="post">
+	<input type="hidden" name="_token" value="{{ token }}">
+	<input type="hidden" name="transaction[id]" value="{{ result.id }}">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Account <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="las la-id-card"></i></span>
+							</div>
+							<select name="transaction[account_id]" class="custom-select" required>
+								<option value="">Select Account</option>
+								{% for value in accounts %}
+									<option value="{{ value.id }}" {% if value.id == result.account_id %}selected{% endif %}>{{ value.account_name~'('~value.bank_name~')' }}</option>
+								{% endfor %}
+								
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Date <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="las la-calendar"></i></span>
+							</div>
+							<input type="text" name="transaction[date]" class="form-control date" value="{{ result.date|date(common.info.date_format) }}" placeholder="Enter Date . . . " required>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Transaction Type <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="las la-bookmark"></i></span>
+							</div>
+							<select name="transaction[transaction_type]" class="custom-select" required>
+								<option value="">Select Transaction Type</option>
+								<option value="1" {{ result.transaction_type == '1' ? 'selected' : '' }}>Debit</option>
+								<option value="2" {{ result.transaction_type == '2' ? 'selected' : '' }}>Credit</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Amount <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text">{{ common.info.currency_abbr }}</span>
+							</div>
+							<input type="text" name="transaction[amount]" class="form-control" value="{% if result.transaction_type == '1' %}{{ result.debit }}{% elseif result.transaction_type == '2' %}{{ result.credit }}{% endif %}" placeholder="Enter Amount . . . " required>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Payment Method</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="las la-credit-card"></i></span>
+							</div>
+							<select name="transaction[method]" class="custom-select">
+								{% for value in methods %}
+									<option value="{{ value.id }}" {{ value.id == result.method ? 'selected' : '' }}>{{ value.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Ref#</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="las la-qrcode"></i></span>
+							</div>
+							<input type="text" name="transaction[code]" class="form-control" value="{{ result.code }}" placeholder="Enter Ref#, Transaction ID etc . . . ">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Description</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="las la-paragraph"></i></span>
+							</div>
+							<textarea name="transaction[description]" class="form-control" placeholder="Enter Description . . .">{{ result.description }}</textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer text-center">
+			<button type="submit" name="submit" class="btn btn-primary"><i class="ti-save-alt pr-2"></i> Save</button>
+		</div>
+	</div>
+</form>
+{{ include('common/footer.twig') }}

@@ -1,0 +1,66 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+    <div class="row align-items-center">
+        <div class="col-sm-4">
+            <h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+            <div class="breadcrumbs d-inline-block">
+                <ul>
+                    <li><a href="{{ common.info.url_route }}">Dashboard</a></li>
+                    <li>{{ page_title }}</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-8 text-right">
+            <div class="btn btn-white btn-sm text-left">
+                <i class="las la-filter text-primary pr-1"></i>
+                <input type="text" class="table-date-range" data-start="{{ period.start|date(common.info.date_format) }}" data-end="{{ period.end|date(common.info.date_format) }}" data-route="emaillogs">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-middle table-bordered table-striped datatable-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Email To</th>
+                        <th>Subject</th>
+                        <th>Sent By</th>
+                        <th>Created Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for value in result %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td class="text-primary">{{ value.email_to }}</td>
+                            <td>{{ value.subject }}</td>
+                            <td>{{ value.user }}</td>
+                            <td>{{ value.date_of_joining|date(common.info.date_format~' H:i:s') }}</td>
+                            <td class="table-action">
+                                <a class="text-primary edit log-message-view" data-message="{{ value.message }}"><i class="las la-laptop" data-toggle="tooltip" title="View"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="mailLogModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Message</h5>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="log-message" style="padding: 10px; border: 5px solid #ddd;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ include ('common/footer.twig') }}

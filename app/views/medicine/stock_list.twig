@@ -1,0 +1,155 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-4">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-sm-8 text-right">
+			<div class="dropdown d-inline-block mr-2">
+				<a class="btn btn-white btn-sm dropdown-toggle" data-toggle="dropdown"><i class="las la-cloud-download-alt text-primary pr-2"></i> Export</a>
+				<ul class="dropdown-menu dropdown-menu-right export-button">
+					<li><a href="#" class="pdf"><i class="las la-file-pdf pr-2"></i>PDF</a></li>
+					<li><a href="#" class="excel"><i class="las la-file-excel pr-2"></i>Excel</a></li>
+					<li><a href="#" class="csv"><i class="las la-file-csv pr-2"></i>CSV</a></li>
+					<li><a href="#" class="print"><i class="las la-print pr-2"></i>Print</a></li>
+					<li><a href="#" class="copy"><i class="las la-copy pr-2"></i>Copy</a></li>
+				</ul>
+			</div>
+			<a href="{{ common.info.url_route }}medicine/stock&type=live" class="btn btn-white btn-sm mr-2"><i class="las la-calendar text-success mr-2"></i> Live Stock</a>
+			<div class="dropdown d-inline-block mr-2">
+				<a class="btn btn-white btn-sm dropdown-toggle" data-toggle="dropdown"><i class="las la-calendar text-danger pr-2"></i> Expire Stock</a>
+				<ul class="dropdown-menu dropdown-menu-right export-button">
+					<li><a href="{{ common.info.url_route }}medicine/stock&type=expired">Expired</a></li>
+					<li><a href="{{ common.info.url_route }}medicine/stock&type=willexpirein1">Expire in 1 month</a></li>
+					<li><a href="{{ common.info.url_route }}medicine/stock&type=willexpirein2">Expire in 2 month</a></li>
+					<li><a href="{{ common.info.url_route }}medicine/stock&type=willexpirein3">Expire in 3 month</a></li>
+					<li><a href="{{ common.info.url_route }}medicine/stock&type=willexpirein6">Expire in 6 month</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-body">
+		<div class="table-responsive stock-table">
+			<table class="table table-middle table-bordered table-striped datatable-table">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Name</th>
+						<th>Batch</th>
+						<th>Expiry</th>
+						<th>Purchase Price</th>
+						<th>Sale Price</th>
+						<th>Qty</th>
+						<th>Sold</th>
+						<th>Available</th>
+						{% if page_purchase_view or page_purchase_edit or page_edit or page_delete %}
+							<th></th>
+						{% endif %}
+					</tr>
+				</thead>
+				<tbody>
+					{% for value in result %}
+						<tr>
+							<td>{{ loop.index }}</td>
+							<td class="text-primary medicine">{{ value.name }}</td>
+							<td class="batch">{{ value.batch }}</td>
+							<td class="expiry text-danger">{{ value.expiry|date(common.info.date_my_format) }}</td>
+							<td class="purchase">{{ common.info.currency_abbr~value.purchaseprice }}</td>
+							<td class="sale">{{ common.info.currency_abbr~value.saleprice }}</td>
+							<td class="qty">{{ value.qty }}</td>
+							<td class="sold">{{ value.sold }}</td>
+							<td class="available">{{ value.qty - value.sold }}</td>
+							{% if page_purchase_view or page_purchase_edit or page_edit or page_delete %}
+								<td class="table-action">
+									{% if page_purchase_view or page_purchase_edit or page_edit %}
+										<div class="dropdown d-inline-block">
+											<a class="text-primary edit dropdown-toggle" data-toggle="dropdown"><i class="las la-ellipsis-h"></i></a>
+											<ul class="dropdown-menu dropdown-menu-right export-button">
+												{% if page_edit %}
+													<li><a class="edit-stock" data-id="{{ value.id }}" data-medicineid="{{ value.medicine_id }}"><i class="las la-pen-nib pr-2"></i>Update Stock</a></li>
+												{% endif %}
+												{% if page_purchase_view %}
+													<li><a href="{{ common.info.url_route~'medicine/purchase/view&id='~value.purchase_id }}"><i class="las la-laptop pr-2"></i>Purchase View</a></li>
+												{% endif %}
+												{% if page_purchase_edit %}
+													<li><a href="{{ common.info.url_route~'medicine/purchase/edit&id='~value.purchase_id }}"><i class="las la-edit pr-2"></i>Purchase Edit</a></li>
+												{% endif %}
+											</ul>
+										</div>
+									{% endif %}
+									{% if page_delete %}
+										<a class="table-delete text-danger delete" data-toggle="tooltip" title="Remove from Inventory">
+											<i class="las la-trash-alt"></i><input type="hidden" value="{{ value.id }}">
+										</a>
+									{% endif %}
+								</td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="editstock-modal">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Stock Adjustment</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form action="{{ action }}" method="post">
+				<input type="hidden" name="_token" value="{{ common.token }}">
+				<input type="hidden" name="id" value="">
+				<input type="hidden" name="medicine_id" value="">
+				<div class="modal-body">
+					<div class="form-group">
+						<label>Available in Store <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-warehouse"></i></span></div>
+							<input type="text" name="available" class="form-control" required>
+						</div>
+						<span class="form-text">Sold quantity will be updated => Sold = Total - Available in store. <br>If you want to change qunatity or other info please click on edit link.</span>
+					</div>
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>Medicine</th>
+								<th>Batch</th>
+								<th>Expiry</th>
+								<th>Qty</th>
+								<th>Sold</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="medicine">Combiflam</td>
+								<td class="batch">Batch</td>
+								<td class="expiry">Expiry</td>
+								<td class="qty">Qty</td>
+								<td class="sold">Sold</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" name="submit" class="btn btn-primary">Update Stock</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% if page_delete %}{{ include('common/delete_modal.twig') }}{% endif %}
+	{{ include('common/footer.twig') }}

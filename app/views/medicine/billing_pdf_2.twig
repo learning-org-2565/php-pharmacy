@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Invoice</title>
+	<link rel="stylesheet" href="public/css/style-invoice.css" type="text/css">
+</head>
+<body>
+	<div class="inv-template inv-template-2 billing-template">
+		<div class="company pl-30 pr-30">
+			<table>
+				<tbody>
+					<tr>
+						<td class="info">
+							<div class="logo"><img src="{{ info.url~info.logo }}" alt="logo"></div>
+							<div class="name">{{ info.legal_name }}</div>
+							<div class="text">{{ info.address|join(', ') }}</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="strip"><p>Invoice</p></div>
+		<div class="meta pl-30 pr-30">
+			<table>
+				<tbody>
+					<tr>
+						<td class="bill-to v-align-bottom">
+							<div class="heading">Bill To</div>
+							<div class="title">{{ result.name }}</div>
+							<div class="text">{{ result.email }}</div>
+							<div class="text">{{ result.mobile }}</div>
+						</td>
+						<td class="info v-align-bottom">
+							<table class="text-right">
+								<tbody>
+									<tr>
+										<td class="text">#</td>
+										<td class="text w-min-130">{{ info.invoice_prefix~"%05d"|format(result.id) }}</td>
+									</tr>
+									<tr>
+										<td class="text">Date : </td>
+										<td class="text w-min-130">{{ result.bill_date|date(info.date_format) }}</td>
+									</tr>
+									{% if result.doctor %}
+										<tr>
+											<td class="text">Doctor : </td>
+											<td class="text w-min-130">Dr. {{ result.doctor }}</td>
+										</tr>
+									{% endif %}
+									<tr>
+										<td class="text">Payment Method : </td>
+										<td class="text w-min-130">{{ result.payment_method }}</td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="item pl-30 pr-30">
+			<table cellspacing="0">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>BatchNo</th>
+						<th>ExpiryDate</th>
+						<th>Quantity</th>
+						<th>SalePrice</th>
+						<th>Discount</th>
+						<th>Tax</th>
+						<th>Price</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for value in result.items %}
+						<tr>
+							<td class="title">{{ value.name }}</td>
+							<td>{{ value.batch_name }}</td>
+							<td>{{ value.expiry|date(info.date_my_format) }}</td>
+							<td>{{ value.qty }}</td>
+							<td>{{ value.saleprice }}</td>
+							<td>{{ value.discountvalue }}</td>
+							<td class="tax">
+								{% for tax in value.tax %}
+									<div>
+										<span>{{ common.info.currency_abbr~tax.tax_price }}</span>
+										<span> ({{ tax.name }})</span>
+									</div>
+								{% endfor %}
+							</td>
+							<td>{{ value.price }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<div class="payment-total">
+			<table>
+				<tbody>
+					<tr>
+						<td class="v-align-middle pr-30 pl-30">
+							<div class="customer-note">
+								<p>{{ result.note }}</p>
+							</div>
+						</td>
+						<td class="v-align-top pr-30">
+							<div class="total">
+								<table cellspacing="0">
+									<tbody>
+										<tr>
+											<td>Sub Total</td>
+											<td>{{ info.currency_abbr~result.subtotal }}</td>
+										</tr>
+										<tr>
+											<td>Discount</td>
+											<td>{{ info.currency_abbr~result.discount_value }}</td>
+										</tr>
+										<tr>
+											<td>Tax</td>
+											<td>{{ info.currency_abbr~result.tax }}</td>
+										</tr>
+										<tr class="main">
+											<td>Amount</td>
+											<td>{{ info.currency_abbr~result.amount }}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

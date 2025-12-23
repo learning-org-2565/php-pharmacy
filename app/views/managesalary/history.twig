@@ -1,0 +1,102 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-12">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}managesalary">Manage Salary</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-4">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="user-avtar">
+					{% if result.picture and result.picture is ondisk %}
+						<img class="img-fluid img-thumbnail" src="public/uploads/{{ result.picture }}">
+					{% else %}
+						<span>{{ result.firstname|split('')[0] }}</span>
+					{% endif %}
+				</div>
+				<div class="user-details pt-2  pb-2 text-center">
+					<h2 class="font-20">{{ result.firstname~' '~result.lastname }}</h2>
+				</div>
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<tbody>
+							<tr>
+								<td>Email Address</td>
+								<td>{{ result.email }}</td>
+							</tr>
+							<tr>
+								<td>Mobile No.</td>
+								<td>{{ result.mobile }}</td>
+							</tr>
+							<tr>
+								<td>Gender</td>
+								<td>{{ result.gender }}</td>
+							</tr>
+							<tr>
+								<td>Bloodgroup</td>
+								<td>{{ result.bloodgroup }}</td>
+							</tr>
+							<tr>
+								<td>DOB</td>
+								<td> {% if result.dob %}{{ result.dob|date(common.info.date_format) }}{% endif %}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-8">
+		<div class="panel panel-default"> 
+			<div class="panel-body">
+				<table class="table table-middle table-bordered table-striped datatable-table">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Month</th>
+							<th>Date</th>
+							<th>Net Salary</th>
+							<th>Payment Amount</th>
+							{% if page_view or page_delete %}
+								<th></th>
+							{% endif %}
+						</tr>
+					</thead>
+					<tbody>
+						{% for value in history %}
+							<tr>
+								<td>{{ loop.index }}</td>
+								<td>{{ value.month_year|date(common.info.date_my_format) }}</td>
+								<td>{{ value.date_of_joining|date(common.info.date_format) }}</td>
+								<td>{{ common.info.currency_abbr~value.net_salary }}</td>
+								<td>{{ common.info.currency_abbr~value.amount }}</td>
+								{% if page_view or page_delete %}
+									<td class="table-action">
+										{% if page_view %}
+											<a href="{{ common.info.url_route~'managesalary/history/view&id='~value.id }}" class="text-info edit" data-toggle="tooltip" title="View"><i class="las la-laptop"></i></a>
+										{% endif %}
+										{% if page_view %}
+											<a class="table-delete text-danger delete" data-toggle="tooltip" title="Delete"><i class="las la-trash-alt"></i><input type="hidden" value="{{ value.id }}"></a>
+										{% endif %}
+									</td>
+								{% endif %}
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+{% if page_delete %}{{ include('common/delete_modal.twig') }}{% endif %}
+	{{ include('common/footer.twig') }}

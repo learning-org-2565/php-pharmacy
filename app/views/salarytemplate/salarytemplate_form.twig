@@ -1,0 +1,139 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-12">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}salarytemplate">Salary Template</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<form action="{{ action }}" method="post">
+	<input type="hidden" name="_token" value="{{ common.token }}">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Salary Grades <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-user"></i></span></div>
+							<input type="text" name="salary[grade]" class="form-control" value="{{ result.grade }}" placeholder="Salary Grades" required>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Basic Salary <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-user"></i></span></div>
+							<input type="text" name="salary[basic_salary]" class="form-control basic-salary" value="{{ result.basic_salary }}" placeholder="Basic Salary" required>
+							<span class="invalid-feedback"></span>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<table class="table table-bordered table-middle mb-5 allowance-container">
+						<thead>
+							<tr>
+								<td colspan="3" class="pt-2 pb-2"><label>Allowances</label></td>
+							</tr>
+						</thead>
+						<tbody>
+							{% for value in result.allowance %}
+								<tr class="item-row">
+									<td><input type="text" name="salary[allowance][{{ loop.index0 }}][label]" class="form-control mb-0" value="{{ value.label }}" placeholder="Enter Allowances Label"></td>
+									<td>
+										<input type="text" name="salary[allowance][{{ loop.index0 }}][value]" class="form-control mb-0 allowance" value="{{ value.value }}" placeholder="Enter Allowances Value">
+										<span class="invalid-feedback"></span>
+									</td>
+									<td><a class="text-danger text-center remove-row" data-name="allowance"><i class="las la-trash-alt"></i></a></td>
+								</tr>
+							{% else %}
+								<tr class="item-row">
+									<td><input type="text" name="salary[allowance][0][label]" class="form-control mb-0" placeholder="Enter Allowances Label"></td>
+									<td>
+										<input type="text" name="salary[allowance][0][value]" class="form-control mb-0 allowance" placeholder="Enter Allowances Value">
+										<span class="invalid-feedback"></span>
+									</td>
+									<td><a class="text-danger text-center remove-row" data-name="allowance"><i class="las la-trash-alt"></i></a></td>
+								</tr>
+							{% endfor %}
+							<tr>
+								<td colspan="3" class="p-1 text-right"><a class="btn btn-primary btn-sm add-row" data-name="allowance"><i class="las la-plus"></i> Add</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-md-6">
+					<table class="table table-bordered table-middle mb-5 deduction-container">
+						<thead>
+							<tr>
+								<td colspan="3" class="pt-2 pb-2"><label>Deduction</label></td>
+							</tr>
+						</thead>
+						<tbody>
+							{% for value in result.deduction %}
+								<tr class="item-row">
+									<td><input type="text" name="salary[deduction][{{ loop.index0 }}][label]" class="form-control mb-0" value="{{ value.label }}" placeholder="Enter Deduction Label"></td>
+									<td>
+										<input type="text" name="salary[deduction][{{ loop.index0 }}][value]" class="form-control mb-0 deduction" value="{{ value.value }}" placeholder="Enter Deduction Value">
+										<span class="invalid-feedback"></span>
+									</td>
+									<td><a class="text-danger text-center remove-row" data-name="deduction"><i class="las la-trash-alt"></i></a></td>
+								</tr>
+							{% else %}
+								<tr class="item-row">
+									<td><input type="text" name="salary[deduction][0][label]" class="form-control mb-0" placeholder="Enter Deduction Label"></td>
+									<td>
+										<input type="text" name="salary[deduction][0][value]" class="form-control mb-0 deduction" placeholder="Enter Deduction Value">
+										<span class="invalid-feedback"></span>
+									</td>
+									<td><a class="text-danger text-center remove-row" data-name="deduction"><i class="las la-trash-alt"></i></a></td>
+								</tr>
+							{% endfor %}
+							<tr>
+								<td colspan="3" class="p-1 text-right"><a class="btn btn-primary btn-sm add-row" data-name="deduction"><i class="las la-plus"></i> Add</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-md-4"></div>
+				<div class="col-md-8">
+					<table class="table table-bordered table-middle">
+						<thead>
+							<tr>
+								<td colspan="2" class="pt-2 pb-2"><label>Total Salary Details</label></td>
+							</tr>
+							<tr>
+								<td>Gross Salary</td>
+								<td><input type="text" name="salary[gross_salary]" class="form-control mb-0 gross-salary" value="{{ result.gross_salary }}" readonly></td>
+							</tr>
+							<tr>
+								<td>Total Deduction</td>
+								<td>
+									<input type="text" name="salary[total_deduction]" class="form-control mb-0 total-deduction" value="{{ result.total_deduction }}" readonly>
+								</td>
+							</tr>
+							<tr>
+								<td>Net Salary</td>
+								<td><input type="text" name="salary[net_salary]" class="form-control mb-0 net-salary" value="{{ result.net_salary }}" readonly></td>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="salary[id]" value="{{ result.id }}">
+		<div class="panel-footer text-center">
+			<button type="submit" name="submit" class="btn btn-primary salarytemplate-submit"><i class="ti-save-alt pr-2"></i> Save</button>
+		</div>
+	</div>
+</form>
+<script src="public/js/salary.js"></script>
+{{ include('common/footer.twig') }}

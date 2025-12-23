@@ -1,0 +1,88 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-12">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}managesalary">Manage Salary</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-4">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="user-avtar">
+					{% if result.picture and result.picture is ondisk %}
+						<img class="img-fluid img-thumbnail" src="public/uploads/{{ result.picture }}">
+					{% else %}
+						<span>{{ result.firstname|split('')[0] }}</span>
+					{% endif %}
+				</div>
+				<div class="user-details pt-2  pb-2 text-center">
+					<h2 class="font-20">{{ result.firstname~' '~result.lastname }}</h2>
+				</div>
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<tbody>
+							<tr>
+								<td>Email Address</td>
+								<td>{{ result.email }}</td>
+							</tr>
+							<tr>
+								<td>Mobile No.</td>
+								<td>{{ result.mobile }}</td>
+							</tr>
+							<tr>
+								<td>Gender</td>
+								<td>{{ result.gender }}</td>
+							</tr>
+							<tr>
+								<td>Bloodgroup</td>
+								<td>{{ result.bloodgroup }}</td>
+							</tr>
+							<tr>
+								<td>DOB</td>
+								<td> {% if result.dob %}{{ result.dob|date(common.info.date_format) }}{% endif %}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-8">
+		<div class="panel panel-default"> 
+			<div class="panel-head">
+				<div class="panel-title">Salary Template</div>
+			</div>
+			<form action="{{ action }}" method="post">
+				<div class="panel-body">
+					<input type="hidden" name="_token" value="{{ common.token }}">
+					<input type="hidden" name="id" value="{{ result.user_id }}">
+					<div class="form-group">
+						<label>Salary Template <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-mobile"></i></span></div>
+							<select name="salarytemplate" class="custom-select" required>
+								<option value="">Select Salary Template</option>
+								{% for value in salarytemplate %}
+								    <option value="{{ value.id }}" {{ value.id == result.salarytemplate_id ? 'selected' : false }}>{{ value.grade }}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="panel-footer text-center">
+					<button type="submit" name="submit" class="btn btn-primary"><i class="ti-save-alt pr-2"></i> Save</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{{ include('common/footer.twig') }}

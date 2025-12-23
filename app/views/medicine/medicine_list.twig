@@ -1,0 +1,152 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-4">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-sm-8 text-right">
+			{% if page_upload %}
+				<a class="btn btn-white btn-sm mr-2" data-toggle="modal" data-target="#uploadmedicine-modal"><i class="las la-cloud-upload-alt text-primary pr-2"></i> Import Medicines</a>
+			{% endif %}
+			<div class="dropdown d-inline-block mr-2">
+				<a class="btn btn-white btn-sm dropdown-toggle" data-toggle="dropdown"><i class="las la-cloud-download-alt text-primary pr-2"></i> Export</a>
+				<ul class="dropdown-menu dropdown-menu-right export-button">
+					<li><a href="#" class="pdf"><i class="las la-file-pdf pr-2"></i>PDF</a></li>
+					<li><a href="#" class="excel"><i class="las la-file-excel pr-2"></i>Excel</a></li>
+					<li><a href="#" class="csv"><i class="las la-file-csv pr-2"></i>CSV</a></li>
+					<li><a href="#" class="print"><i class="las la-print pr-2"></i>Print</a></li>
+					<li><a href="#" class="copy"><i class="las la-copy pr-2"></i>Copy</a></li>
+				</ul>
+			</div>
+			{% if page_add %}
+				<a href="{{ common.info.url_route }}medicine/add" class="btn btn-primary btn-sm"><i class="las la-plus pr-2"></i> New Medicine</a>
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-body">
+		<div class="table-responsive">
+			<table class="table table-middle table-bordered table-striped datatable-table">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Medicine</th>
+						<th>Company</th>
+						<th>Unit</th>
+						<th>Unit/Packing</th>
+						<th>Category</th>
+						<th>Storebox</th>
+						<th>Reorderlevel</th>
+						<th>Live Stock</th>
+						<th>Status</th>
+						{% if page_view or page_edit or page_delete %}
+							<th></th>
+						{% endif %}
+					</tr>
+				</thead>
+				<tbody>
+					{% for value in result %}
+						<tr>
+							<td>{{ loop.index }}</td>
+							<td>
+								<p class="text-primary mb-0">{{ value.name }}</p>
+								<p class="mb-0">{{ value.generic }}</p>
+							</td>
+							<td>{{ value.company }}</td>
+							<th>{{ value.unit }}</th>
+							<td>{{ value.unitpacking }}</td>
+							<td>{{ value.category_name }}</td>
+							<td>{{ value.storebox }}</td>
+							<td>{{ value.reorderlevel }}</td>
+							<td>{{ value.livestock }}</td>
+							<td>
+								{% if value.minlevel >= value.livestock %}
+									<span class="badge badge-sm badge-danger">Minlevel</span>
+								{% elseif value.reorderlevel >= value.livestock %}
+									<span class="badge badge-sm badge-warning">Reorderlevel</span>
+								{% else %}
+									<span class="badge badge-sm badge-primary">Normal</span>
+								{% endif %}
+							</td>
+							{% if page_view or page_edit or page_delete %}
+								<td class="table-action">
+									{% if page_view or page_edit %}
+										<div class="dropdown d-inline-block">
+											<a class="text-primary edit dropdown-toggle" data-toggle="dropdown"><i class="las la-ellipsis-h"></i></a>
+											<ul class="dropdown-menu dropdown-menu-right export-button">
+												{% if page_view %}
+													<li><a href="{{ common.info.url_route~'medicine/view&id='~value.id }}"><i class="las la-laptop pr-2"></i>View</a></li>
+												{% endif %}
+												{% if page_edit %}
+													<li><a href="{{ common.info.url_route~'medicine/edit&id='~value.id }}"><i class="las la-edit pr-2"></i>Edit</a></li>	
+												{% endif %}
+											</ul>
+										</div>
+									{% endif %}
+									{% if page_delete %}
+										<a class="table-delete text-danger delete" data-toggle="tooltip" title="Delete">
+											<i class="las la-trash-alt"></i><input type="hidden" value="{{ value.id }}">
+										</a>
+									{% endif %}
+								</td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="uploadmedicine-modal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Import Medicines</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form action="{{ common.info.url_route }}medicine/upload" method="post" enctype="multipart/form-data">
+				<input type="hidden" name="_token" value="{{ common.token }}">
+				<div class="modal-body">
+					<div class="form-group">
+						<label>Medicine Category</label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-tag"></i></span></div>
+							<select name="category" class="custom-select">
+								{% for value in category %}
+								    <option value="{{ value.id }}">{{ value.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+					<div class="form-group mb-0">
+						<div class="input-group">
+							<div class="custom-file">
+								<input type="file" name="medicine" class="custom-file-input m-0" id="medicinefile" accept=".csv" required>
+								<label class="custom-file-label" for="medicinefile">Choose file (Only CSV file)</label>
+							</div>
+							<div class="input-group-append">
+								<a href="{{ common.info.url_route }}medicine/sample" class="input-group-text">Download Sample</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" name="submit" class="btn btn-primary">Upload</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% if page_delete %}{{ include('common/delete_modal.twig') }}{% endif %}
+	{{ include('common/footer.twig') }}

@@ -1,0 +1,359 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-4">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}invoices">Invoices</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-sm-8 text-right">
+			{% if page_send_mail %}
+				<a data-toggle="modal" class="btn btn-success btn-sm" data-target="#invoiceMail"><i class="las la-envelope mr-2"></i>Send Email</a>
+			{% endif %}
+			{% if page_pdf %}
+				<a href="{{ common.info.url_route~'invoice/pdf&id='~result.id }}" class="btn btn-danger btn-sm" target="_blank"><i class="las la-file-pdf mr-2"></i>PDF/Print</a>
+			{% endif %}
+			{% if page_edit %}
+				<a href="{{ common.info.url_route~'invoice/edit&id='~result.id }}" class="btn btn-primary btn-sm"><i class="las la-edit mr-2"></i>Edit</a>
+			{% endif %}
+			{% if page_addpayment %}
+				<a class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addPayment"><i class="las la-wallet mr-2"></i>Add Payment</a>
+			{% endif %}
+			<a data-toggle="modal" class="btn btn-info btn-sm" data-target="#attach-file" class="btn btn-secondary btn-sm"><i class="las la-paperclip"></i></a>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-8 col-lg-12 col-xl-8">
+		<div class="inv-template mb-4">
+			<div class="inv-template-bdy table-responsive p-4">
+				<div class="company table-responsive">
+					<table>
+						<tbody>
+							<tr>
+								<td class="info">
+									<div class="logo"><img src="{{ common.info.logo }}" alt="logo"></div>
+									<div class="name">{{ common.info.legal_name }}</div>
+									<div class="text">{% if common.info.mail %}{{ common.info.mail }},{% endif %} {{ common.info.phone }}</div>
+									<div class="text">{{ common.info.address|join(', ') }}</div>
+								</td>
+								<td class="text-right">
+									<div class="title">Invoice</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="meta table-responsive">
+					<table>
+						<tbody>
+							<tr>
+								<td class="bill-to v-aling-bottom">
+									<div class="heading">Bill To</div>
+									<div class="title">{{ result.name }}</div>
+									<div class="text">{{ result.email }}</div>
+									<div class="text">{{ result.mobile }}</div>
+								</td>
+								<td class="info v-aling-bottom">
+									<table class="text-right">
+										<tbody>
+											<tr>
+												<td class="text">#</td>
+												<td class="text w-min-130">{{ common.info.invoice_prefix~"%05d"|format(result.id) }}</td>
+											</tr>
+											<tr>
+												<td class="text">Invoice Date</td>
+												<td class="text w-min-130">{{ result.invoicedate|date(common.info.date_format) }}</td>
+											</tr>
+											<tr>
+												<td class="text">Due Date</td>
+												<td class="text w-min-130">{{ result.invoicedate|date(common.info.duedate) }}</td>
+											</tr>
+											<tr>
+												<td class="text">Due Amount</td>
+												<td class="text w-min-130">{{ common.info.currency_abbr~result.due }}</td>
+											</tr>
+											<tr>
+												<td class="text">Payment Method</td>
+												<td class="text w-min-130">{{ result.method }}</td>
+											</tr>
+											<tr>
+												<td class="text">Status</td>
+												<td class="text w-min-130"> {% if result.inv_status == "0" %}Draft{% else %}{{ result.status }}{% endif %}</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="item table-responsive">
+					<table>
+						<thead>
+							<tr>
+								<th class="w-min-280">Items &amp; Description</th>
+								<th>Qty</th>
+								<th>Unit Cost</th>
+								<th>Discount</th>
+								<th>Tax</th>
+								<th>Price</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for value in result.items %}
+								<tr>
+
+									<td class="title">
+										<p>{{ value.name }}</p>
+										<span>{{ value.descr }}</span>
+									</td>
+									<td>{{ value.quantity }}</td>
+									<td>{{ common.info.currency_abbr~value.cost }}</td> 
+									<td>{% if value.discountvalue %}{{ info.currency_abbr~value.discountvalue }}{% else %}0{% endif %}</td> 
+									<td class="tax">
+										{% for tax in value.tax %}
+											<div>
+												<span>{{ common.info.currency_abbr~tax.tax_price }}</span><span> ({{ tax.name }})</span>
+											</div>
+										{% endfor %}
+									</td>
+									<td>{{ common.info.currency_abbr~value.price }}</td>
+								</tr>
+							{% endfor %}
+							<tr class="total">
+								<td rowspan="5" colspan="3" class="blank">
+								</td>
+								<td class="title">Sub Total</td>
+								<td class="value" colspan="2">{{ common.info.currency_abbr~result.subtotal }}</td>
+							</tr>
+							<tr class="total">
+								<td class="title">Discount</td>
+								<td class="value" colspan="2">{{ common.info.currency_abbr~result.discount_value }}</td>
+							</tr>
+							<tr class="total">
+								<td class="title">Tax</td>
+								<td class="value" colspan="2">{{ common.info.currency_abbr~result.tax }}</td>
+							</tr>
+							<tr class="total">
+								<td class="title">Total</td>
+								<td class="value" colspan="2">{{ common.info.currency_abbr~result.amount }}</td>
+							</tr>
+							<tr class="total">
+								<td class="title">Paid</td>
+								<td class="value" colspan="2">{{ common.info.currency_abbr~result.paid }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="note">
+					<table>
+						<tbody>
+							<tr>
+								<td class="block align-top">
+									<span>Customer Note</span>
+									<p>{{ result.note }}</p>
+								</td>
+								<td class="block align-top">
+									<span>Terms &amp; Conditions</span>
+									<p>{{ result.tc }}</p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4 col-lg-12 col-xl-4">
+		<div class="row">
+			<div class="col-md-12 col-lg-6 col-xl-12">
+				<div class="panel panel-default">
+					<div class="panel-head">
+						<div class="panel-title">
+							<span class="panel-title-text">Payment History</span>
+						</div>
+						<div class="panel-action">
+							{% if page_addpayment %}
+								<a class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addPayment"><i class="las la-wallet mr-1"></i> Add Payment</a>
+							{% endif %}
+						</div>
+					</div>
+					<div class="panel-body table-responsive">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>Date</th>
+									<th>Method</th>
+									<th>Amount</th>
+								</tr>
+							</thead>
+							<tbody>{% set total = 0 %}
+								{% for value in payments %}
+									<tr>
+										<td>{{ value.payment_date|date(common.info.date_format) }}</td>
+										<td>{{ value.method_name }}</td>
+										<td>{{ common.info.currency_abbr~value.amount }}</td>
+									</tr>{% set total = total + value.amount %}
+								{% else %}
+									<tr>
+										<td colspan="3">Payment History</td>
+									</tr>
+								{% endfor %}
+								<tr>
+									<td colspan="2" class="text-right">Total</td>
+									<td>{{ common.info.currency_abbr~total }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12 col-lg-6 col-xl-12">
+				<div class="panel panel-default">
+					<div class="panel-head">
+						<div class="panel-title">
+							<span class="panel-title-text">Attachments</span>
+						</div>
+						<div class="panel-action">
+							<a data-toggle="modal" class="btn btn-info btn-sm" data-target="#attach-file" class="btn btn-secondary btn-sm"><i class="las la-paperclip"></i></a>
+						</div>
+					</div>
+					<div class="panel-wrapper">
+						<div class="attachment-container">
+							{% for value in attachments %}
+								<div class="attachment-image attachment-pdf">
+									{% if value.ext == "pdf" %}
+										<a href="public/uploads/attachments/{{ value.file }}" class="open-pdf"><i class="las la-file-pdf"></i></a>
+									{% else %}
+										<a data-fancybox="gallery" href="public/uploads/attachments/{{ value.file }}">
+											<img src="public/uploads/attachments/{{ value.file }}" alt="">
+										</a>
+									{% endif %}
+									<div class="attachment-delete" data-toggle="tooltip" title="Delete"><a class="las la-trash-alt"></a></div>
+									<input type="hidden" name="report_name" value="{{ value.file }}">
+								</div>
+							{% else %}
+								<p class="p-3 text-danger text-center">No doument found !!!</p>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Add Payment Modal -->
+<div id="addPayment" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add Payments</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<form action="{{ action }}" method="post">
+				<div class="modal-body">
+					<div class="form-group">
+						<label class="col-form-label">Payment Method</label>
+						<select name="payment[method]" class="custom-select" required>
+							{% for value in method %}
+								<option value="{{ value.id }}">{{ value.name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="form-group">
+						<label class="col-form-label">Amount ( In {{ common.info.currency_abbr }} )</label>
+						<input type="text" class="form-control" name="payment[amount]" value="{{ result.due }}" placeholder="Amount" required>
+					</div>
+					<div class="form-group">
+						<label class="col-form-label">Payment Date</label>
+						<input type="text" class="form-control date bg-white" name="payment[date]" placeholder="Payment Date" autocomplete="off" required readonly>
+					</div>
+					<input type="hidden" name="payment[invoice]" value="{{ result.id }}">
+					<input type="hidden" name="payment[email]" value="{{ result.email }}">
+					<input type="hidden" name="_token" value="{{ common.token }}">
+				</div>
+				<div class="modal-footer">
+					<button type="submit" name="submit" class="btn btn-primary"><i class="ti-save-alt pr-2"></i> Save</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<!-- Attach File Modal -->
+<div id="attach-file" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Uplaod Attachments</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<form action="{{ common.info.url_route }}attach/documents" class="dropzone" id="attach-file-upload">
+					<input type="hidden" name="id" value="{{ result.id }}">
+					<input type="hidden" name="type" value="invoice">
+					<input type="hidden" name="_token" value="{{ common.token }}">
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Sent Email -->
+<div id="invoiceMail" class="modal fade" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Send Invoice</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<form action="{{ common.info.url_route }}invoice/sentmail" method="post" enctype="multipart/form-data">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-6 form-group">
+							<label>To</label>
+							<input type="text" class="form-control" value="{{ result.name }}" placeholder="To" readonly>
+						</div>
+						<div class="col-md-6 form-group">
+							<label>BCC</label>
+							<input type="email" class="form-control" name="mail[bcc]" value="" placeholder="BCC">
+						</div>
+					</div>
+					<div class="form-group">
+						<label>Subject</label>
+						<input type="text" class="form-control" name="mail[subject]" value="Invoice Reminder" placeholder="Subject" required>
+					</div>
+					<div class="form-group">
+						<label>Attach PDF?</label>
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" name="mail[attachPdf]" class="custom-control-input" value="1" id="mailPdf" checked>
+							<label class="custom-control-label" for="mailPdf"><i class="icon-paper-clip ml-2"></i> {{ common.info.invoice_prefix~"%05d"|format(result.id) }}.pdf</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-form-label">Message</label>
+						<textarea name="mail[message]" class="mail-summernote" placeholder="Message"></textarea>
+					</div>
+					<input type="hidden" name="mail[id]" value="{{ result.id }}">
+					<input type="hidden" name="_token" value="{{ common.token }}">
+				</div>
+				<div class="modal-footer">
+					<button type="submit" name="submit" class="btn btn-primary"><i class="ti-save-alt pr-2"></i> Save</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- include summernote css/js-->
+<link href="public/css/summernote-bs4.css" rel="stylesheet">
+<script type="text/javascript" src="public/js/summernote-bs4.min.js"></script>
+<script type="text/javascript" src="public/js/klinikal.summernote.js"></script>
+{{ include('common/footer.twig') }}

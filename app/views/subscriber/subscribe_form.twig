@@ -1,0 +1,51 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-12">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}subscribers">Subscribers</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<form action="{{ action }}" method="post">
+	<input type="hidden" name="_token" value="{{ common.token }}">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="form-group">
+				<label>Email Address <span class="form-required">*</span></label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="las la-envelope"></i></span>
+					</div>
+					<input type="text" name="subscriber[mail]" class="form-control" value="{{ result.email }}" placeholder="Enter Subscribers Email Address . . .">
+				</div>
+			</div>
+			{% if result.id %}
+				<div class="form-group">
+					<label>Status</label>
+					<div class="input-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="las la-check-square"></i></span>
+						</div>
+						<select name="subscriber[status]" class="custom-select">
+							<option value="1" {{ result.status == '1' ? 'selected' : false }}>Enabled</option>
+							<option value="0" {{ result.status == '0' ? 'selected' : false }}>Disabled</option>
+						</select>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+		<input type="hidden" name="subscriber[id]" value="{{ result.id }}">
+		<div class="panel-footer text-center">
+			<button type="submit" name="submit" class="btn btn-primary"><i class="ti-save-alt pr-2"></i> Save</button>
+		</div>
+	</div>
+</form>
+{{ include('common/footer.twig') }}

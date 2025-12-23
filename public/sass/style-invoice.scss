@@ -1,0 +1,708 @@
+/*------------------------------------------------------------------
+[Invoice SASS Stylesheet]
+
+Project  :  Drug Store
+Version  :  1.1
+Author   :  Pepdev
+Website  :  www.pepdev.com
+-------------------------------------------------------------------*/
+
+body {
+	padding: 20px 0;
+	margin: 0;
+}
+
+@page {padding: 0; margin: 0; }
+
+.m-0 {
+	margin: 0;
+}
+
+.mt-0 {
+	margin-top: 0;
+}
+
+.mb-0 {
+	margin-bottom: 0;
+}
+
+.p-0 {
+	padding: 0;
+}
+
+.pl-30 {
+	margin-left: 20px!important;
+}
+
+.pr-30 {
+	margin-right: 20px!important;
+}
+
+.pt-30 {
+	margin-right: 20px!important;
+}
+
+.d-inline-block {
+	display: inline-block;
+}
+
+.v-align-middle {
+	vertical-align: middle;
+}
+
+.v-align-top {
+	vertical-align: top;
+}
+
+.v-align-bottom {
+	vertical-align: bottom;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.text-left {
+	text-align: left;
+}
+
+.text-right {
+	text-align: right;
+}
+
+.w-min-130 {
+	min-width: 130px;
+	width: 130px;
+}
+
+table {
+	width: 100%;
+}
+
+.inv-template {
+}
+
+.company {
+
+	.title {
+		font-size: 32px;
+		font-weight: 800;
+		color: #333;
+		text-transform: uppercase;
+	}
+
+	.name {
+		font-size: 18px;
+		font-weight: 600;
+		color: #333;
+		margin: 10px 0 5px 0;
+	}
+
+	.logo {
+		margin: 0 0 10px 0;
+	}
+
+	.logo img {
+		height: 40px;
+	}
+
+	.text {
+		font-size: 14px;
+		color: #333;
+		margin: 0 0 5px 0;
+	}
+}
+
+.meta {
+	padding: 10px 0;
+	border-top: 1px solid #ddd;
+	.heading {
+		font-size: 10px;
+		color: #777;
+	}
+	.title {
+		font-size: 18px;
+		font-weight: 600;
+		color: #333;
+		margin: 5px 0 5px 0;
+	}
+	.text {
+		font-size: 14px;
+		color: #333;
+		margin: 0 0 5px 0;
+	}
+}
+
+.item {
+	text-align: left;
+	padding: 15px 0;
+	border-top: 1px solid #ddd;
+
+	table {
+
+		th {
+			color: #000;
+			font-size: 14px;
+			padding: 8px;
+			text-align: left;
+			font-weight: 400;
+			background-color: #DDD;
+			border: 1px solid #DDD;
+		}
+
+		td {
+			color: #333;
+			font-size: 14px;
+			padding: 5px;
+			border: 1px solid #DDD;
+
+			&.title  {
+
+				p {
+					font-size: 14px;
+					margin: 0 0 5px 0;
+				}
+
+				span {
+					font-size: 14px;
+					color: #777;
+				}
+			}
+		}
+	}
+
+	.item-list {
+		> td.title {
+			width: 200px;
+		}
+		> td.qty {
+			width: 40px;
+		}
+	}
+
+	.tax {
+
+		div {
+			margin: 5px 0 0 0;
+			padding: 5px 0 0 0;
+
+			&:nth-child(1) {
+				margin: 0;
+				padding: 0;
+				border-top: 0;
+			}
+
+			span {
+				display: inline-block;
+				vertical-align: middle;
+
+				&:nth-child(2) {
+					font-size: 12px;
+					margin: 0 0 0 5px;
+					color: #777;
+				}
+			}
+		}
+	}
+
+	.total {
+		
+		.blank {
+			border: 0;
+		}
+
+		.title {
+			text-align: right;
+			color: #333;
+			font-weight: 500;
+		}
+	}
+}
+
+.payment, .item .payment {
+	padding: 10px 0;
+	.title {
+		font-size: 14px;
+		color: #333333;
+		margin: 0 0 5px 0;
+		font-weight: 600;
+		text-align: left;
+	}
+
+	table td {
+		width: auto;
+		font-size: 14px;
+		color: #333333;
+		padding: 0 0 5px 0;
+		border: 0;
+		background-color: #ffffff;
+
+		&:nth-child(1) {
+			min-width: 100px;
+			width: 100px;
+			color: #777777;
+		}
+	}
+}
+
+.payment-total {
+	padding-bottom: 10px;
+
+	.payment {
+
+		.title {
+			font-size: 14px;
+			color: #333333;
+			margin: 0 0 5px 0;
+			font-weight: 600;
+			text-align: left;
+		}
+
+		td {
+			font-size: 14px;
+			color: #333333;
+			padding: 0 0 5px 0;
+			border: 0;
+			background-color: #ffffff;
+
+			&:nth-child(1) {
+				width: 60%;
+				min-width: 100px;
+				width: 100px;
+				color: #777777;
+			}
+
+			&:nth-child(2) {
+				width: 40%;
+			}
+		}
+	}
+
+	.total { 
+		td {
+			padding: 5px 5px 10px 5px;
+			font-size: 16px;
+			color: #333333;
+			border-spacing:0 15px;
+
+			&:nth-child(1) {
+				width: 50%;
+			}
+
+			&:nth-child(2) {
+				width: 50%;
+				padding-right: 30px;
+				font-weight: 600;
+			}
+		}
+		.main {
+			td {
+				font-size: 20px;
+				font-weight: 800;
+				padding: 10px;
+				background-color: #ffc809;
+			}
+		}
+	}
+
+	.customer-note p {
+		color: #5d78ff;
+	}
+}
+
+.payment-total td:nth-child(1) {
+	width: 60%;
+}
+
+.payment-total td:nth-child(2) {
+	width: 40%;
+}
+
+.bottom {
+	padding: 10px 0 10px 0;
+	border-top: 1px solid #eeeeee;
+}
+
+.sign {
+	text-align: right;
+	img {
+		margin: 5px 0 0 0;
+		max-width: 200px;
+		height: 40px;
+	}
+	.sign-label {
+		font-size: 16px;
+		color: #333;
+		font-weight: 600;
+		margin: 0;
+	}
+	.sign_white {
+		width: 200px;
+		height: 50px;
+	}
+}
+
+.note {
+	padding: 10px 0;
+	border-top: 1px solid #eee;
+
+	.block {
+		width: 50%;
+		span {
+			display: block;
+			font-size: 14px;
+			color: #333333;
+			margin: 0;
+			font-weight: 600;
+		}
+
+		p {
+			font-size: 14px;
+			color: #333333;
+			margin: 5px 0 0 0;
+		}
+	}
+}
+
+.tc {
+	padding: 20px 0 20px 0;
+	text-align: center;
+	border-top: 1px solid #eeeeee;
+
+	span {
+		font-size: 12px;
+		color: #aaaaaa;
+	}
+
+	p {
+		font-size: 14px;
+		color: #777777;
+		margin: 5px 0 0 0;
+	}
+}
+
+.customer-note {
+	p {
+		font-size: 18px;
+		color: #555555;
+		font-style: italic;	
+	}
+}
+
+.inv-template-2 {
+
+	.strip {
+		position: relative;
+		width: 100%;
+		height: 50px;
+		text-align: right;
+		background-color: #ffc809;
+
+		p {
+			position: absolute;
+			right: 0;
+			top: -1px;
+			display: inline-block;
+			padding: 0px 20px;
+			margin: 0 75px 0 0;
+			font-size: 44px;
+			text-transform: uppercase;
+			color: #333333;
+			font-weight: 800;
+			background-color: #fff;
+		}
+	}
+
+	.item {
+		table {
+			border: 1px solid #373b46;
+
+			tr:nth-child(2n) {
+				background-color: #f7f9fd;
+			}
+		}
+
+		th {
+			padding: 15px 10px;
+			color: #eeeeee;
+			font-weight: 400;
+			background-color: #373b46;
+			border: 0;
+		}
+
+		td {
+			color: #373b46;
+			border: 0;
+			padding: 5px 10px;
+		}
+	}
+}
+
+.inv-template-3 {
+
+	.company {
+
+		.title {
+			font-size: 36px;
+			letter-spacing: 10px;
+		}
+	}
+
+	.meta {
+		padding: 10px 0 0 0;
+		border: 0;
+
+		table tr > td {
+			width: 33.3%;
+		}
+
+		td.bill-to {
+			background: #d0d4d5;
+			padding: 20px;
+		}
+
+		td.info {
+			width: 40%;
+			background: #e6eaeb;
+			padding: 20px;
+		}
+
+		td.money {
+			background: #f2f4f5;
+			padding: 20px;
+
+			.block {
+
+				span {
+					display: block;
+					font-size: 12px;
+					color: #999999;
+				}
+				p {
+					font-size: 20px;
+					color: #333333;
+					margin: 5px 0 0 0;
+					font-weight: 600;
+				}
+			}
+		}
+
+		.money .block:last-child {
+			margin: 10px 0 0 0
+		}
+
+
+	}
+
+	.item {
+		border: 0;
+
+		tr:nth-last-child(1) td {
+			border-bottom: 2px solid #d0d4d5; 
+		}
+
+		th {
+			background: #eeeeee;
+			border: 0;
+			padding: 10px;
+			border-top: 2px solid #d0d4d5;
+		}
+	}
+
+	.item-list td {
+		background: #f2f4f5;
+		border: 0;
+		padding: 10px;
+		border-top: 2px solid #d0d4d5;
+	}
+
+	
+
+	.bottom td {
+		text-align: right;
+	}
+}
+
+.inv-template-4 {
+	.strip {
+		background-color: #6378bb;
+	}
+
+	.item {
+		table {
+			border: 1px solid #3f4863;
+		}
+
+		tr:nth-child(2n) {
+			background-color: #f6f8ff;
+		}
+
+		th {
+			padding: 10px 10px;
+			color: #eeeeee;
+			font-weight: 400;
+			background-color: #3f4863;
+			border: 0;
+		}
+
+		td {
+			color: #373b46;
+			border: 0;
+			padding: 10px;
+		}
+	}
+
+	.payment-total .total .main td {
+		color: #fff;
+		background: #6278bb;
+	}
+}
+
+.inv-template-5 {
+	.hdr {
+		.info {
+			padding: 20px 0 10px 0;
+			border-bottom: 10px solid #eef0f7;
+		}
+
+		.tag {
+			background: #6378bb;
+			border-bottom: 10px solid #70d0c0;
+
+			h2 {
+				font-size: 36px;
+				color: #ffffff;
+				letter-spacing: 16px;
+				padding: 20px 0;
+				text-align: center;
+				text-transform: uppercase;
+			}
+		}
+	}
+
+	.meta {
+		border: 0;
+		padding: 15px 0 10px 0;
+
+		.text {
+			color: #636979;
+		}
+
+		.bill-to .title {
+			font-size: 20px;
+		}
+	}
+
+	.inv-details {
+		td {
+			width: 20%;
+
+			> div {
+				padding:  20px;
+				background: #eef0f7;
+			}
+
+			span {
+				margin: 0;
+				font-size: 12px;
+				color: #999999;
+			}
+
+			p {
+				margin: 10px 0 0 0;
+				color: #333;
+				font-weight: 600;
+				font-size: 16px;
+			}
+		}
+	}
+
+	.inv-item {
+		border: 0;
+		padding: 10px 0 15px 0;
+
+		table {
+			padding: 0 3px;
+		}
+
+		th {
+			background: #99d6cb;
+			font-size: 16px;
+			padding: 10px;
+			border: 0;
+		}
+
+		td {
+			padding: 10px;
+			border: 0;
+			border-bottom: 1px solid #99d6cb;
+		}
+	}
+
+	.payment-total {
+		tr:nth-last-child(1) {
+			td {
+				border: 0;
+			}
+		}
+
+		.main {
+			td {
+				background: #6378bb;
+				border: 0;
+				color: #fff;
+			}
+		}
+
+		.inv-details p {
+			display: inline-block;
+		}
+
+		.total {
+			background: #eef0f7;
+			padding: 20px;
+		}
+
+		.payment {
+			padding: 0 0 0 10px;
+		}
+	}
+
+	.bottom {
+		.customer-note p {
+			color: #22b99f;
+		}
+	}
+}
+
+
+
+.billing-template {
+	.item {
+		.title {
+			width: 100px;
+		}
+
+		.tax {
+			min-width: 100px;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,53 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+    <div class="row align-items-center">
+        <div class="col-sm-6">
+            <h2 class="page-title-text d-inline-block">Dashboard</h2>
+        </div>
+        <div class="col-sm-6 text-right"></div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-head">
+        <div class="panel-title">Notices</div>
+    </div>
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-middle table-bordered table-striped datatable-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for notice in notices %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td class="text-primary">{{ notice.title }}</td>
+                        <td>{{ notice.description }}</td>
+                        <td>{{ notice.start_date|date(common.info.date_format) }}</td>
+                        <td>{{ notice.end_date|date(common.info.date_format) }}</td>
+                        <td>
+                            {% if notice.status == 1 %}
+                            <span class="label label-success">Active</span>
+                            {% elseif notice.status == 0 %}
+                            <span class="label label-danger">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td class="table-action">
+                            <a class="text-primary edit" href="{{ common.info.url_route }}noticeboard/view&id={{ notice.id }}"><i class="las la-laptop"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{ include('common/footer.twig') }}

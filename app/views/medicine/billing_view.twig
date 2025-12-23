@@ -1,0 +1,200 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-6">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}medicine/billing">POS/Bill</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-sm-6 text-right">
+			{% if page_pdf %}
+				<a href="{{ common.info.url_route~'medicine/billing/pdf&id='~result.id }}" class="btn btn-danger btn-sm mr-2" target="_blank"><i class="las la-file-pdf mr-2"></i>PDF</a>
+			{% endif %}
+			{% if page_edit %}
+				<a href="{{ common.info.url_route~'medicine/billing/edit&id='~result.id }}" class="btn btn-primary btn-sm"><i class="far las la-edit mr-2"></i>Edit</a>
+			{% endif %}
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-8">
+		<div id="printableArea" class="inv-template mb-4">
+			<div class="inv-template-bdy table-responsive p-4">
+				<div class="company table-responsive">
+					<table>
+						<tbody>
+							<tr>
+								<td class="info">
+									<div class="logo"><img src="{{ common.info.logo }}" alt="logo"></div>
+									<div class="name">{{ common.info.legal_name }}</div>
+									<div class="text">{{ common.info.address|join(', ') }}</div>
+								</td>
+								<td class="text-right">
+									<div class="title">Invoice</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="meta table-responsive">
+					<table>
+						<tbody>
+							<tr>
+								<td class="bill-to v-aling-bottom">
+									<div class="heading">Bill To</div>
+									<div class="title">{{ result.name }}</div>
+									<div class="text">{{ result.email }}</div>
+									<div class="text">{{ result.mobile }}</div>
+								</td>
+								<td class="info v-aling-bottom">
+									<table class="text-right">
+										<tbody>
+											<tr>
+												<td class="text">#</td>
+												<td class="text w-min-130">{{ common.info.invoice_prefix~"%05d"|format(result.id) }}</td>
+											</tr>
+											<tr>
+												<td class="text">Date</td>
+												<td class="text w-min-130">{{ result.bill_date|date(common.info.date_format) }}</td>
+											</tr>
+											<tr>
+												<td class="text">Doctor</td>
+												<td class="text w-min-130">Dr. {{ result.doctor }}</td>
+											</tr>
+											<tr>
+												<td class="text">Payment Method</td>
+												<td class="text w-min-130">{{ result.payment_method }}</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="item table-responsive">
+					<table>
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Batch No</th>
+								<th>Expiry Date</th>
+								<th>Quantity</th>
+								<th>Sale Price</th>
+								<th>Discount</th>
+								<th>Tax</th>
+								<th>Price</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for value in result.items %}
+								<tr>
+									<td>{{ value.name }}</td>
+									<td>{{ value.batch_name }}</td>
+									<td>{{ value.expiry|date(common.info.date_my_format) }}</td>
+									<td>{{ value.qty }}</td>
+									<td>{{ value.saleprice }}</td>
+									<td>{% if value.discountvalue %}{{ value.discountvalue }}{% else %}0{% endif %}</td>
+									<td class="tax">
+										{% for tax in value.tax %}
+											<div>
+												<span>{{ common.info.currency_abbr~tax.tax_price }}</span>
+												<span> ({{ tax.name }})</span>
+											</div>
+										{% endfor %}
+									</td>
+									<td>{{ value.price }}</td>
+								</tr>
+							{% endfor %}
+							<tr class="total">
+								<td rowspan="5" colspan="4" class="blank">
+								</td>
+								<td class="title" colspan="2">Sub Total</td>
+								<td class="value" colspan="2">{{ common.info.currency_abbr~result.subtotal }}</td>
+							</tr>
+							<tr class="total">
+								<td class="title" colspan="2">Discount</td>
+								<td class="value" colspan="2">{{ common.info.currency_abbr~result.discount_value }}</td>
+							</tr>
+							<tr class="total">
+								<td class="title" colspan="2">Tax</td>
+								<td class="value" colspan="2">{{ common.info.currency_abbr~result.tax }}</td>
+							</tr>
+							<tr class="total">
+								<td class="title" colspan="2">Amount</td>
+								<td class="value" colspan="2">{{ common.info.currency_abbr~result.amount }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="note">
+					<table>
+						<tbody>
+							<tr>
+								<td class="block align-top">
+									<span>Note</span>
+									<p>{{ result.note }}</p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="panel panel-default">
+			<div class="panel-head">
+				<div class="panel-title">
+					<span class="panel-title-text">Attachments</span>
+				</div>
+				<div class="panel-action">
+					<a data-toggle="modal" class="btn btn-info btn-sm" data-target="#attach-file" class="btn btn-secondary btn-sm"><i class="las la-paperclip"></i></a>
+				</div>
+			</div>
+			<div class="panel-wrapper">
+				<div class="attachment-container">
+					{% for value in attachments %}
+						<div class="attachment-image attachment-pdf">
+							{% if value.ext == "pdf" %}
+								<a href="public/uploads/attachments/{{ value.file }}" class="open-pdf"><i class="las la-file-pdf"></i></a>
+							{% else %}
+								<a data-fancybox="gallery" href="public/uploads/attachments/{{ value.file }}">
+									<img src="public/uploads/attachments/{{ value.file }}" alt="">
+								</a>
+							{% endif %}
+							<div class="attachment-delete" data-toggle="tooltip" title="Delete"><a class="las la-trash-alt"></a></div>
+							<input type="hidden" name="report_name" value="{{ value.file }}">
+						</div>
+					{% else %}
+						<p class="p-3 text-danger text-center">No doument found !!!</p>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Attach File Modal -->
+<div id="attach-file" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Upload Attachments</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<form action="{{ common.info.url_route }}attach/documents" class="dropzone" id="attach-file-upload">
+					<input type="hidden" name="id" value="{{ result.id }}">
+					<input type="hidden" name="type" value="billing">
+					<input type="hidden" name="_token" value="{{ common.token }}">
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{{ include('common/footer.twig') }}

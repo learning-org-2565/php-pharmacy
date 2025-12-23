@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Invoice</title>
+	<link rel="stylesheet" href="public/css/style-invoice.css" type="text/css">
+</head>
+<body class="p-0">
+	<div class="inv-template inv-template-5 billing-template">
+		<div class="hdr company">
+			<table cellspacing="0">
+				<tr>
+					<td class="info" style="width: 50%">
+						<div class="pl-30">
+							<div class="logo"><img src="{{ info.url~info.logo }}" alt="logo"></div>
+							<div class="name">{{ info.legal_name }}</div>
+							<div class="text">{% if info.mail %}{{ info.mail }},{% endif %} {{ info.phone }}</div>
+							<div class="text">{{ info.address|join(', ') }}</div>
+						</div>	
+					</td>
+					<td class="tag">
+						<h2>Invoice</h2>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="meta pl-30 pr-30 text-center">
+			<div class="bill-to">
+				<div class="heading">Bill To</div>
+				<div class="title">{{ result.name }}</div>
+				<div class="text">{% if result.email %}{{ result.email }},{% endif %} {{ result.mobile }}</div>
+			</div>
+		</div>
+		<div class="inv-details pl-30 pr-30">
+			<table cellpadding="1">
+				<tr>
+					<td class="text-center">
+						<div>
+							<span>#</span>
+							<p>{{ info.invoice_prefix~"%05d"|format(result.id) }}</p>
+						</div>
+					</td>
+					<td class="text-center">
+						<div>
+							<span>Date</span>
+							<p>{{ result.bill_date|date(info.date_format) }}</p>
+						</div>
+					</td>
+					{% if result.doctor %}
+						<td class="text-center">
+							<div>
+								<span>Doctor</span>
+								<p>Dr. {{ result.doctor }}</p>
+							</div>
+						</td>
+					{% else %}
+						<td class="text-center">
+							<div>
+								<span>Amount</span>
+								<p>{{ info.currency_abbr~result.amount }}</p>
+							</div>
+						</td>
+					{% endif %}	
+					<td class="text-center">
+						<div>
+							<span>Payment Method</span>
+							<p>{{ result.payment_method }}</p>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="pl-30 pr-30">
+			<div class="inv-item item">
+				<table cellspacing="0">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Batch No</th>
+							<th>Expiry Date</th>
+							<th>Quantity</th>
+							<th>Sale Price</th>
+							<th>Discount</th>
+							<th>Tax</th>
+							<th>Price</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for value in result.items %}
+							<tr class="item-list">
+								<td class="title">{{ value.name }}</td>
+								<td>{{ value.batch_name }}</td>
+								<td>{{ value.expiry|date(info.date_my_format) }}</td>
+								<td>{{ value.qty }}</td>
+								<td>{{ value.saleprice }}</td>
+								<td>{{ value.taxprice }}</td>
+								<td class="tax">
+									{% for tax in value.tax %}
+										<div>
+											<span>{{ common.info.currency_abbr~tax.tax_price }}</span>
+											<span> ({{ tax.name }})</span>
+										</div>
+									{% endfor %}
+								</td>
+								<td>{{ value.price }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="payment-total">
+			<table cellspacing="0">
+				<tbody>
+					<tr>
+						<td class="v-align-middle pr-30 pl-30">
+							<div class="customer-note">
+								<p>{{ result.note }}</p>
+							</div>
+						</td>
+						<td class="v-align-top pr-30">
+							<div class="total">
+								<table cellspacing="0">
+									<tbody>
+										<tr>
+											<td>Sub Total</td>
+											<td>{{ info.currency_abbr~result.subtotal }}</td>
+										</tr>
+										<tr>
+											<td>Discount</td>
+											<td>{{ info.currency_abbr~result.discount_value }}</td>
+										</tr>
+										<tr>
+											<td>Tax</td>
+											<td>{{ info.currency_abbr~result.tax }}</td>
+										</tr>
+										<tr class="main">
+											<td>Total</td>
+											<td>{{ info.currency_abbr~result.amount }}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

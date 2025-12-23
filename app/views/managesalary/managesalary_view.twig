@@ -1,0 +1,134 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-6">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}managesalary">Manage Salary</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-sm-6 text-right">
+			{% if page_history %}
+				<a href="{{ common.info.url_route~'managesalary/history&id='~result.user_id }}" class="btn btn-warning btn-sm"><i class="las la-history pr-2"></i>Payment History</a>
+			{% endif %}
+			{% if page_edit %}
+				<a href="{{ common.info.url_route~'managesalary/edit&id='~result.user_id }}" class="btn btn-primary btn-sm mr-2"><i class="las la-edit mr-2"></i>Edit</a>
+			{% endif %}
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-4">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="user-avtar">
+					{% if result.picture and result.picture is ondisk %}
+						<img class="img-fluid img-thumbnail" src="public/uploads/{{ result.picture }}">
+					{% else %}
+						<span>{{ result.firstname|split('')[0] }}</span>
+					{% endif %}
+				</div>
+				<div class="user-details pt-2  pb-2 text-center">
+					<h2 class="font-20">{{ result.firstname~' '~result.lastname }}</h2>
+				</div>
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<tbody>
+							<tr>
+								<td>Email Address</td>
+								<td>{{ result.email }}</td>
+							</tr>
+							<tr>
+								<td>Mobile No.</td>
+								<td>{{ result.mobile }}</td>
+							</tr>
+							<tr>
+								<td>Gender</td>
+								<td>{{ result.gender }}</td>
+							</tr>
+							<tr>
+								<td>Bloodgroup</td>
+								<td>{{ result.bloodgroup }}</td>
+							</tr>
+							<tr>
+								<td>DOB</td>
+								<td> {% if result.dob %}{{ result.dob|date(common.info.date_format) }}{% endif %}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-8">
+		<div class="panel panel-default"> 
+			<div class="panel-head">
+				<div class="panel-title">Salary Info</div>
+			</div>
+			<div class="panel-body">
+				<table class="table table-bordered">
+					<tbody>
+						<tr>
+							<td>Salary Grades</td>
+							<td>{{ salary.grade }}</td>
+						</tr>
+						<tr>
+							<td>Basic Salary</td>
+							<td>{{ common.info.currency_abbr~salary.basic_salary }}</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="row">
+					<div class="col-md-6">
+						<label class="col-form-label mt-3 mb-0">Allowances</label>
+						<table class="table table-bordered table-striped">
+							<tbody>
+								{% for value in salary.allowance %}
+									<tr>
+										<td>{{ value.label }}</td>
+										<td>{{ common.info.currency_abbr~value.value }}</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+					<div class="col-md-6">
+						<label class="col-form-label mt-3 mb-0">Deductions</label>
+						<table class="table table-bordered table-striped">
+							<tbody>
+								{% for value in salary.deduction %}
+									<tr>
+										<td>{{ value.label }}</td>
+										<td>{{ common.info.currency_abbr~value.value }}</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<label class="col-form-label mt-3 mb-0">Total Salary Details</label>
+				<table class="table table-bordered table-striped">
+					<tbody>
+						<tr>
+							<td>Gross Salary</td>
+							<td>{{ common.info.currency_abbr~salary.gross_salary }}</td>
+						</tr>
+						<tr>
+							<td>Total Deduction</td>
+							<td>{{ common.info.currency_abbr~salary.total_deduction }}</td>
+						</tr>
+						<tr>
+							<td>Net Salary</td>
+							<td>{{ common.info.currency_abbr~salary.net_salary }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+{{ include('common/footer.twig') }}

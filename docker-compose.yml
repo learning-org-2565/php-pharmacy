@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # PHP Apache Application
+  pharmacy-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pharmacy-app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+      - ./public/uploads:/var/www/html/public/uploads
+    environment:
+      - DB_HOSTNAME=pharmacy-db
+      - DB_USERNAME=pharmacy_user
+      - DB_PASSWORD=pharmacy_secure_password
+      - DB_DATABASE=pharmacy_db
+      - DB_PREFIX=ds_
+    depends_on:
+      - pharmacy-db
+    networks:
+      - pharmacy-network
+    restart: unless-stopped
+
+  # MySQL Database
+  pharmacy-db:
+    image: mysql:8.0
+    container_name: pharmacy-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: pharmacy_db
+      MYSQL_USER: pharmacy_user
+      MYSQL_PASSWORD: pharmacy_secure_password
+    volumes:
+      - pharmacy-db-data:/var/lib/mysql
+      - ./install/builder/drugstore.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - pharmacy-network
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+
+  # phpMyAdmin (Optional - for database management)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: pharmacy-phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: pharmacy-db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root_password
+      UPLOAD_LIMIT: 100M
+    depends_on:
+      - pharmacy-db
+    networks:
+      - pharmacy-network
+    restart: unless-stopped
+
+# Persistent volumes
+volumes:
+  pharmacy-db-data:
+    driver: local
+
+# Network
+networks:
+  pharmacy-network:
+    driver: bridge

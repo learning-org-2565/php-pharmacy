@@ -1,0 +1,236 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-12">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}customers">Customers</a></li>
+					<li>{{ result.firstname~' '~result.lastname }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-4">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="user-avtar">
+					<span>{{ result.firstname|split('')[0] }}</span>
+				</div>
+				<div class="user-details text-center pt-3">
+					<h3>{{ result.firstname~' '~result.lastname }}</h3>
+					<ul class="v-menu text-left pt-3 nav d-block">
+						<li><a href="#customer-info" class="active" data-toggle="tab"><i class="las la-info-circle"></i> <span>Customer Info</span></a></li>
+						{% if page_invoices %}
+							<li><a href="#customer-invoice" data-toggle="tab"><i class="las la-file-invoice"></i> <span>Invoices</span></a></li>
+						{% endif %}
+						{% if page_bills %}
+							<li><a href="#customer-bills" data-toggle="tab"><i class="las la-cart-plus"></i> <span>POS/Bills</span></a></li>
+						{% endif %}
+						{% if page_edit %}
+							<li><a href="{{ common.info.url_route~'customer/edit&id='~result.id }}"><i class="las la-edit"></i> <span>Edit Customer</span></a></li>
+						{% endif %}
+						{% if page_sendmail %}
+							<li><a href="#customer-sendmail" data-toggle="tab"><i class="las la-envelope"></i> <span>Send Email</span></a></li>
+						{% endif %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-8">
+		<div class="tab-content">
+			<div class="tab-pane fade show active" id="customer-info">
+				<div class="panel panel-default">
+					<div class="panel-head">
+						<div class="panel-title">Customer Info</div>  
+					</div>
+					<div class="panel-body">
+						<table class="table table-striped patient-table">
+							<tbody>
+								<tr>
+									<td>Email Address</td>
+									<td>{{ result.email }}</td>
+								</tr>
+								<tr>
+									<td>Mobile Number</td>
+									<td>{{ result['mobile'] }}</td>
+								</tr>
+								<tr>
+									<td>Date of Birth</td>
+									<td>{% if result.dob %}{{ result.dob|date(common.info.date_format)~' ('~result.age~' Years)' }}{% endif %}</td>
+								</tr>
+								<tr>
+									<td>Gender</td>
+									<td>{{ result.gender }}</td>
+								</tr>
+								<tr>
+									<td>Blood Group</td>
+									<td>{{ result.bloodgroup }}</td>
+								</tr>
+								<tr>
+									<td>Address</td>
+									<td>{{ result.address|join(', ') }}</td>
+								</tr>
+								<tr>
+									<td>Status</td>
+									<td>
+										{% if result.status == '1' %}
+											<span class="label label-success">Active</span>
+										{% elseif result.status == '0' %}
+											<span class="label label-danger">InActive</span>
+										{% endif %}
+									</td>
+								</tr>
+								<tr>
+									<td>Created Date</td>
+									<td>{{ result.date_of_joining|date(common.info.date_format) }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			{% if page_invoices %}
+				<div class="tab-pane fade" id="customer-invoice">
+					<div class="panel panel-default">
+						<div class="panel-head">
+							<div class="panel-title">Customer's Invoices</div>
+							<div class="panel-action">
+								{% if invoice_add %}
+									<a href="{{ common.info.url_route }}invoice/add" class="btn btn-primary btn-sm" target="_blank"><i class="las la-plus pr-2"></i> New Invoice</a>
+								{% endif %}
+							</div>
+						</div>
+						<div class="panel-body">
+							<table class="table table-middle table-bordered table-striped datatable-table">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Amount</th>
+										<th>Due</th>
+										<th>Status</th>
+										<th>InvoiceDate</th>
+										{% if invoice_view %}
+										<th></th>
+										{% endif %}
+									</tr>
+								</thead>
+								<tbody>
+									{% for value in invoices %}
+										<tr>
+											<td class="text-primary">{{ common.info.invoice_prefix~"%05d"|format(value.id) }}</td>
+											<td>{{ common.info.currency_abbr~' '~value.amount }}</td>
+											<td>{{ common.info.currency_abbr~' '~value.due }}</td>
+											<td>
+												{% if value.status == "Paid" %}
+													<span class="label label-success">Paid</span>
+												{% elseif value.status == "Unpaid" %}
+													<span class="label label-danger">Unpaid</span>
+												{% elseif value.status == "Pending" %}
+													<span class="label label-secondary">Pending</span>
+												{% elseif value.status == "In Process" %}
+													<span class="label label-primary">In Process</span>
+												{% elseif value.status == "Cancelled" %}
+													<span class="label label-warning">Cancelled</span>
+												{% elseif value.status == "Other" %}
+													<span class="label label-default">Other</span>
+												{% elseif value.status == "Partially Paid" %}
+													<span class="label label-info badge-pill badge-sm">Partially Paid</span>
+												{% else %}
+													<span class="label label-white">Unknown</span>
+												{% endif %}
+											</td>
+											<td>{{ value.invoicedate|date(common.info.date_format) }}</td>
+											{% if invoice_view %}
+												<td class="table-action">
+													<a href="{{ common.info.url_route~'invoice/view&id='~value.id }}" class="text-primary edit" data-toggle="tooltip" title="View" target="_blank"><i class="las la-laptop"></i></a>
+												</td>
+											{% endif %}	
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			{% endif %}
+			{% if page_bills %}
+				<div class="tab-pane fade" id="customer-bills">
+					<div class="panel panel-default">
+						<div class="panel-head">
+							<div class="panel-title">Customer's Bills</div>
+						</div>
+						<div class="panel-body">
+							<table class="table table-middle table-bordered table-striped datatable-table">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Amount</th>
+										<th>BillDate</th>
+										{% if bill_view %}
+											<th></th>
+										{% endif %}
+									</tr>
+								</thead>
+								<tbody>
+									{% for value in bills %}
+									<tr>
+										<td class="text-primary">{{ common.info.invoice_prefix~"%05d"|format(value.id) }}</td>
+										<td>{{ common.info.currency_abbr~' '~value.amount }}</td>
+										<td>{{ value.bill_date|date(common.info.date_format) }}</td>
+										{% if bill_view %}
+										<td class="table-action">
+											<a href="{{ common.info.url_route~'medicine/billing/view&id='~value.id }}" class="text-primary edit" data-toggle="tooltip" title="View" target="_blank"><i class="las la-laptop"></i></a>
+										</td>
+										{% endif %}
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			{% endif %}
+			{% if page_sendmail %}
+				<div class="tab-pane fade" id="customer-sendmail">
+					<div class="panel panel-default">
+						<div class="panel-head">
+							<div class="panel-title">Send Email to Customer</div>  
+						</div>
+						<form action="{{ common.info.url_route }}customer/sendmail" method="post">
+							<input type="hidden" name="_token" value="{{ common.token }}" readonly>
+							<div class="panel-body">
+								<div class="form-group">
+									<label>To</label>
+									<input type="text" value="{{ result.firstname~' '~result.lastname }}" class="form-control" readonly>
+									<input type="hidden" name="mail[id]" value="{{ result.id }}" readonly>
+								</div>
+								<div class="form-group">
+									<label>Subject</label>
+									<input type="text" name="mail[subject]" class="form-control" placeholder="Enter Subject . . .">
+								</div>
+								<div class="form-group">
+									<label>Message</label>
+									<textarea name="mail[message]" class="form-control mail-summernote" placeholder="Enter Message . . ."></textarea>
+								</div>
+							</div>
+							<div class="panel-footer text-center">
+								<button type="submit" name="submit" class="btn btn-primary">Send</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+<!-- include summernote css/js-->
+<link href="public/css/summernote-bs4.css" rel="stylesheet">
+<script type="text/javascript" src="public/js/summernote-bs4.min.js"></script>
+<script type="text/javascript" src="public/js/klinikal.summernote.js"></script>
+<!-- Footer -->
+{{ include('common/footer.twig') }}

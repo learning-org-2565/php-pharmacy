@@ -1,0 +1,98 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-4">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row text-center">
+	<div class="col-md-3">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<i class="las la-file-invoice font-36 text-primary"></i>
+				<h3 class="mb-4">Invoice Report</h3>
+				<a href="{{ common.info.url_route }}reports&name=invoice" class="btn btn-white btn-sm"><i class="las la-laptop"></i> View</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<i class="las la-cart-plus font-36 text-success"></i>
+				<h3 class="mb-4">POS/Bill Report</h3>
+				<a href="{{ common.info.url_route }}reports&name=bill" class="btn btn-white btn-sm"><i class="las la-laptop"></i> View</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<i class="las la-receipt font-36 text-warning"></i>
+				<h3 class="mb-4">Expenses Report</h3>
+				<a href="{{ common.info.url_route }}reports&name=expenses" class="btn btn-white btn-sm"><i class="las la-laptop"></i> View</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<i class="las la-hand-holding-usd font-36 text-danger"></i>
+				<h3 class="mb-4">Salary Report</h3>
+				<a href="{{ common.info.url_route }}reports&name=salary" class="btn btn-white btn-sm"><i class="las la-laptop"></i> View</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<i class="las la-file-invoice-dollar font-36 text-info"></i>
+				<h3 class="mb-4">Purchase Report</h3>
+				<a href="{{ common.info.url_route }}reports&name=purchase" class="btn btn-white btn-sm"><i class="las la-laptop"></i> View</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<i class="las la-book font-36 text-secondary"></i>
+				<h3 class="mb-4">Account Report</h3>
+				<a href="{{ common.info.url_route }}reports&name=accountstatement" class="btn btn-white btn-sm"><i class="las la-laptop"></i> View</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<i class="las la-pills font-36 text-twitter"></i>
+				<h3 class="mb-4">Inventory Report</h3>
+				<a href="{{ common.info.url_route }}reports&name=inventory" class="btn btn-white btn-sm"><i class="las la-laptop"></i> View</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<i class="las la-tv font-36 text-purple"></i>
+				<h3 class="mb-4">Out of Stock Report</h3>
+				<a href="{{ common.info.url_route }}reports&name=outofstock" class="btn btn-white btn-sm"><i class="las la-laptop"></i> View</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<i class="las la-coins font-36 text-facebook"></i>
+				<h3 class="mb-4">Income & Expense Report</h3>
+				<a href="{{ common.info.url_route }}reports&name=income_expenses" class="btn btn-white btn-sm"><i class="las la-laptop"></i> View</a>
+			</div>
+		</div>
+	</div>
+</div>
+{{ include('common/footer.twig') }}

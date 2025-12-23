@@ -1,0 +1,58 @@
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+LICENSE
+*.md
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+error.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+cache/
+
+# Node modules (if any)
+node_modules/
+npm-debug.log
+
+# Composer
+vendor/
+composer.lock
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Docker files (don't copy into container)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Build artifacts
+dist/
+build/
+
+# Testing
+tests/
+phpunit.xml
+.phpunit.result.cache

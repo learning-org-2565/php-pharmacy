@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>{{ common.name }} | Login</title>
+	<link rel="icon" type="image/x-icon" href="{{ theme.favicon }}">
+	<link rel="stylesheet" href="public/css/style.min.css" />
+	<script src="public/js/vendor.min.js"></script>
+	<script src="public/js/custom.js"></script>
+</head>
+<body>
+	<div class="lgn-background" style="background-image: url(public/uploads/{{ theme.lg_background }});">
+		<div class="lgn-wrapper">
+			<div class="lgn-logo text-center">
+				<a href="{{ common.url }}">
+					<img src="{{ theme.logo }}" alt="{{ common.name }}">
+				</a>
+			</div>
+			<div class="lgn-title">Forgot Password</div>
+			<div class="lgn-form">
+				<form class="form-vertical" action="{{ action }}" method="post">
+					{% if success %}
+					<div class="alert alert-success alert-dismissable">{{ success }}<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a></div>
+					{% endif %}
+					{% if error %}
+					<div class="alert alert-danger alert-dismissable">{{ error }}<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a></div>
+					{% endif %}
+					<input type="hidden" name="_token" value="{{ token }}">
+					<div class="lgn-input form-group">
+						<label class="control-label">Email Address</label>
+						<input class="form-control" type="email" name="mail" id="lgn-mail" placeholder="Enter your Email Address" autocomplete="off" required>
+					</div>
+					<div class="lgn-input form-group">
+						<label class="control-label">What is {{ first_number }} plus {{ second_number }} =</label>
+						<input type="text" id="lgn-bot" class="form-control" placeholder="Answer" autocomplete="off" required>
+					</div>
+					
+					<div class="lgn-submit text-center">
+						<button type="submit" id="forgot-submit" class="btn btn-primary" name="forgot">Reset Now</button>
+					</div>
+					<div class="text-center mt-4">
+						<p class="mb-0 font-12">Rember Password?</p>
+						<a href="{{ common.url_route }}login" class="text-primary">Login Now</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+
+

@@ -1,0 +1,34 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-4">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	{% for value in result %}
+		<div class="col-md-4">
+			<div class="panel panel-default">
+				<div class="panel-head">
+					<div class="panel-title">{{ value.account_name }}</div>
+				</div>
+				<div class="panel-body">
+					<p>Bank Name => {{ value.bank_name }}</p>
+					<p>Account Number => {{ value.account_no }}</p>
+					<p class="mb-0">Balance (In {{ common.info.currency_abbr }}) => {{ value.credit - value.debit }}</p>
+				</div>
+				<div class="panel-footer text-right">
+					<a href="{{ common.info.url_route~'reports&name=statement&id='~value.id }}" class="btn btn-primary btn-sm"><i class="las la-book"></i> View Statement</a>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+</div>
+{{ include('common/footer.twig') }}

@@ -1,0 +1,191 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-4">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}staffattendance">Attendence</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-sm-8 text-right">
+			<div class="btn btn-white btn-sm text-left mr-2">
+				<i class="las la-filter text-danger"></i>
+				<input type="text" class="attendance-month" style="width: 85px;" value="{{ monthyear|date('M Y') }}" readonly>
+				<input type="hidden" class="range-month" value="{{ monthyear|date('Y-m') }}" readonly>
+			</div>
+			<div class="dropdown d-inline-block">
+				<a class="btn btn-white btn-sm dropdown-toggle" data-toggle="dropdown"><i class="las la-cloud-download-alt text-primary pr-2"></i> Export</a>
+				<ul class="dropdown-menu dropdown-menu-right export-button">
+					<li><a href="#" class="pdf"><i class="las la-file-pdf pr-2"></i>PDF</a></li>
+					<li><a href="#" class="excel"><i class="las la-file-excel pr-2"></i>Excel</a></li>
+					<li><a href="#" class="csv"><i class="las la-file-csv pr-2"></i>CSV</a></li>
+					<li><a href="#" class="print"><i class="las la-print pr-2"></i>Print</a></li>
+					<li><a href="#" class="copy"><i class="las la-copy pr-2"></i>Copy</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-4">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="row">
+					<div class="col pr-0">
+						<div class="user-avtar">
+							{% if staff.picture and staff.picture is ondisk %}
+								<img class="img-fluid img-thumbnail" src="public/uploads/{{ staff.picture }}">
+							{% else %}
+								<span>{{ staff.firstname|split('')[0] }}</span>
+							{% endif %}
+							<input type="hidden" class="staff-id" value="{{ staff.user_id }}">
+						</div>
+					</div>
+					<div class="col">
+						<div class="user-details">
+							<h2 class="font-20 m-0">{{ staff.firstname~' '~staff.lastname }}</h2>
+							<p class="m-0 font-12">{{ staff.email }}</p>
+							<p class="m-0 font-12">{{ staff.mobile }}</p>
+						</div>
+					</div>
+				</div>
+				
+				
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6 col-md-12 col-lg-12 col-xl-6">
+				<div class="panel panel-default">
+					<div class="widget-12">
+						<div class="row align-items-center">
+							<div class="col-7 text-left">
+								<h3 class="text-primary m-0">{{ summary.P }}</h3>
+								<h6>Present</h6>
+							</div>
+							<div class="col-5 icon text-right">
+								<i class="las la-calendar-check text-primary"></i>
+							</div>
+						</div>
+						<div class="progress progress-sm mt-1">
+							<div class="progress-bar progress-bar-primary" style="width: {{ summary.p_percentage }}%" aria-valuenow="{{ summary.p_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 col-md-12 col-lg-12 col-xl-6">
+				<div class="panel panel-default">
+					<div class="widget-12">
+						<div class="row align-items-center">
+							<div class="col-7 text-left">
+								<h3 class="text-primary m-0">{{ summary.A }}</h3>
+								<h6>Absent</h6>
+							</div>
+							<div class="col-5 icon text-right">
+								<i class="las la-calendar-times text-danger"></i>
+							</div>
+						</div>
+						<div class="progress progress-sm mt-1">
+							<div class="progress-bar progress-bar-danger" style="width: {{ summary.a_percentage }}%" aria-valuenow="{{ summary.a_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 col-md-12 col-lg-12 col-xl-6">
+				<div class="panel panel-default">
+					<div class="widget-12">
+						<div class="row align-items-center">
+							<div class="col-7 text-left">
+								<h3 class="text-warning m-0">{{ summary.L }}</h3>
+								<h6>Late</h6>
+							</div>
+							<div class="col-5 icon text-right">
+								<i class="las la-calendar-minus text-warning"></i>
+							</div>
+						</div>
+						<div class="progress progress-sm mt-1">
+							<div class="progress-bar progress-bar-warning" style="width: {{ summary.l_percentage }}%" aria-valuenow="{{ summary.l_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 col-md-12 col-lg-12 col-xl-6">
+				<div class="panel panel-default">
+					<div class="widget-12">
+						<div class="row align-items-center">
+							<div class="col-7 text-left">
+								<h3 class="text-info m-0">{{ summary.H }}</h3>
+								<h6>Holiday</h6>
+							</div>
+							<div class="col-5 icon text-right">
+								<i class="las la-calendar text-info"></i>
+							</div>
+						</div>
+						<div class="progress progress-sm mt-1">
+							<div class="progress-bar progress-bar-info" style="width: {{ summary.h_percentage }}%" aria-valuenow="{{ summary.h_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 col-md-12 col-lg-12 col-xl-6">
+				<div class="panel panel-default">
+					<div class="widget-12">
+						<div class="row align-items-center">
+							<div class="col-7 text-left">
+								<h3 class="text-secondary m-0">{{ summary.OL }}</h3>
+								<h6>On Leave</h6>
+							</div>
+							<div class="col-5 icon text-right">
+								<i class="las la-calendar-alt text-secondary"></i>
+							</div>
+						</div>
+						<div class="progress progress-sm mt-1">
+							<div class="progress-bar progress-bar-secondary" style="width: {{ summary.ol_percentage }}%" aria-valuenow="{{ summary.ol_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-8">
+		<div class="panel panel-default">
+			<div class="panel-head">
+				<div class="panel-title">{{ monthyear|date('M Y') }}</div>
+			</div>
+			<div class="panel-body">
+				<table class="table table-bordered table-stripped datatable-table">
+					<thead>
+						<tr>
+							<th>Day</th>
+							<th>Attendance</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for key, value in result %}
+							<tr>
+								<td>{{ key|date(common.info.date_format) }}</td>
+								<td>
+									{% if value == 'P' %}
+										<span class="label label-primary">Present</span>
+									{% elseif value == 'A' %}
+										<span class="label label-danger">Absent</span>
+									{% elseif value == 'L' %}
+										<span class="label label-warning">Late</span>
+									{% elseif value == 'H' %}
+										<span class="label label-info">Holiday</span>
+									{% elseif value == 'OL' %}
+										<span class="label label-secondary">On Leave</span>
+									{% endif %}
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<style>.ui-datepicker-calendar{display: none;}</style>
+{{ include('common/footer.twig') }}

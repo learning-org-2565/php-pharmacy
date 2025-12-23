@@ -1,0 +1,73 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+    <div class="row align-items-center">
+        <div class="col-sm-4">
+            <h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+            <div class="breadcrumbs d-inline-block">
+                <ul>
+                    <li><a href="{{ common.info.url }}">Dashboard</a></li>
+                    <li>{{ page_title }}</li>
+                </ul>
+            </div>
+        </div>
+		<div class="col-sm-8 text-right">
+			<div class="btn btn-white btn-sm text-left mr-2">
+                <i class="las la-filter text-danger pr-2"></i>
+                <input type="text" class="table-date-range" data-start="{{ period.start|date(common.info.date_format) }}" data-end="{{ period.end|date(common.info.date_format) }}" data-route="reports&name=income_expenses">
+            </div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6 col-lg-4">
+		<div class="dashboard-stat">
+			<div class="content"><h4 class="text-dark">{{ common.info.currency_abbr~income.amount }}</h4><span class="text-dark">Income</span></div>
+			<div class="icon"><i class="las la-money-check-alt text-primary"></i></div>
+		</div>
+	</div>
+	<div class="col-md-6 col-lg-4">
+		<div class="dashboard-stat">
+			<div class="content"><h4 class="text-dark">{{ common.info.currency_abbr~income.paid }}</h4><span class="text-dark">Paid Amount</span></div>
+			<div class="icon"><i class="las la-money-bill-alt text-success"></i></div>
+		</div>
+	</div>
+	<div class="col-md-6 col-lg-4">
+		<div class="dashboard-stat">
+			<div class="content"><h4 class="text-dark">{{ common.info.currency_abbr~income.tax }}</h4><span class="text-dark">Tax Amount</span></div>
+			<div class="icon"><i class="las la-percent text-warning"></i></div>
+		</div>
+	</div>
+	<div class="col-md-6 col-lg-4">
+		<div class="dashboard-stat">
+			<div class="content"><h4 class="text-dark">{{ common.info.currency_abbr~income.due }}</h4> <span class="text-dark">Due Amount</span></div>
+			<div class="icon"><i class="las la-money-bill text-danger"></i></div>
+		</div>
+	</div>
+	<div class="col-md-6 col-lg-4">
+		<div class="dashboard-stat">
+			<div class="content"><h4 class="text-dark">{{ common.info.currency_abbr~income.discount }}</h4> <span class="text-dark">Discount Amount</span></div>
+			<div class="icon"><i class="las la-money-check text-info"></i></div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6 col-lg-4">
+		<div class="dashboard-stat">
+			<div class="content"><h4 class="text-dark">{{ common.info.currency_abbr~expense.expense }}</h4> <span class="text-dark">Expenses</span></div>
+			<div class="icon"><i class="las la-receipt text-danger"></i></div>
+		</div>
+	</div>
+	<div class="col-md-6 col-lg-4">
+		<div class="dashboard-stat">
+			<div class="content"><h4 class="text-dark">{{ common.info.currency_abbr~expense.salary }}</h4> <span class="text-dark">Salary Expenses</span></div>
+			<div class="icon"><i class="las la-hand-holding-usd text-warning"></i></div>
+		</div>
+	</div>
+	<div class="col-md-6 col-lg-4">
+		<div class="dashboard-stat">
+			<div class="content"><h4 class="text-dark">{{ common.info.currency_abbr~expense.purchase }}</h4> <span class="text-dark">Purchase</span></div>
+			<div class="icon"><i class="las la-file-invoice-dollar text-secondary"></i></div>
+		</div>
+	</div>
+</div>
+{{ include('common/footer.twig') }}

@@ -1,0 +1,313 @@
+{{ include('common/header.twig') }}
+<div class="row">
+    <div class="col-md-6 col-lg-3">
+        <div class="dashboard-stat">
+            <div class="content"><h4 class="text-dark">{{ common.info.currency_abbr }}{{ main_stats.amount|number_format(2, '.', '') }}</h4> <span class="text-dark">Income</span></div>
+            <div class="icon"><i class="las la-money-check-alt text-primary"></i></div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="dashboard-stat">
+            <div class="content"><h4 class="text-dark">{{ common.info.currency_abbr }}{{ main_stats.expense|number_format(2, '.', '') }}</h4> <span class="text-dark">Expenses</span></div>
+            <div class="icon"><i class="las la-receipt text-danger"></i></div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="dashboard-stat">
+            <div class="content"><h4 class="text-dark">{{ common.info.currency_abbr }}{{ main_stats.salary|number_format(2, '.', '') }}</h4> <span class="text-dark">Salary Expenses</span></div>
+            <div class="icon"><i class="las la-hand-holding-usd text-warning"></i></div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="dashboard-stat">
+            <div class="content"><h4 class="text-dark">{{ common.info.currency_abbr }}{{ main_stats.purchase|number_format(2, '.', '') }}</h4> <span class="text-dark">Purchase</span></div>
+            <div class="icon"><i class="las la-file-invoice-dollar text-secondary"></i></div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-head">
+                <div class="panel-title">Invoice</div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <canvas id="invoice-chart" width="1000" height="450"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="widget-1 p-0">
+                            <div class="content">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h5 class="title">POS/Bill</h5>
+                                        <span class="descr">In Last 12 Months</span>
+                                    </div>
+                                    <div class="col text-right">
+                                        <div class="number text-purple">{{ common.info.currency_abbr }}{{ revenue_stats.bill_12|number_format(2, '.', '') }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h5 class="title">POS/Bill</h5>
+                                        <span class="descr">In Last 30 Days</span>
+                                    </div>
+                                    <div class="col text-right">
+                                        <div class="number text-purple">{{ common.info.currency_abbr }}{{ revenue_stats.bill_1|number_format(2, '.', '') }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h5 class="title">Invoice</h5>
+                                        <span class="descr">In Last 12 Months</span>
+                                    </div>
+                                    <div class="col text-right">
+                                        <div class="number text-primary">{{ common.info.currency_abbr }}{{ revenue_stats.income_12|number_format(2, '.', '') }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h5 class="title">Invoice</h5>
+                                        <span class="descr">In Last 30 Days</span>
+                                    </div>
+                                    <div class="col text-right">
+                                        <div class="number text-primary">{{ common.info.currency_abbr }}{{ revenue_stats.income_1|number_format(2, '.', '') }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="row widget-separator-1 align-items-center">
+                <div class="col-md-6 col-lg-6 col-xl-4">
+                    <div class="widget-1">
+                        <div class="content">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="title">Total Income</h5>
+                                    <span class="descr">All Time</span>
+                                </div>
+                                <div class="col text-right">
+                                    <div class="number text-primary">{{ common.info.currency_abbr }}{{ income_stats.amount|number_format(2, '.', '') }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="title">Total Tax</h5>
+                                    <span class="descr">All Time</span>
+                                </div>
+                                <div class="col text-right">
+                                    <div class="number text-warning">{{ common.info.currency_abbr }}{{ income_stats.tax|number_format(2, '.', '') }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-4">
+                    <div class="widget-1">
+                        <div class="content">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="title">Paid</h5>
+                                    <span class="descr">All Time</span>
+                                </div>
+                                <div class="col text-right">
+                                    <div class="number text-success">{{ common.info.currency_abbr }}{{ income_stats.paid|number_format(2, '.', '') }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="title">Due Amount</h5>
+                                    <span class="descr">All Time</span>
+                                </div>
+                                <div class="col text-right">
+                                    <div class="number text-danger">{{ common.info.currency_abbr }}{{ income_stats.due|number_format(2, '.', '') }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 col-xl-4">
+                    <div class="widget-1">
+                        <div class="content">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="title">Discount</h5>
+                                    <span class="descr">All Time</span>
+                                </div>
+                                <div class="col text-right">
+                                    <div class="number text-info">{{ common.info.currency_abbr }}{{ income_stats.discount|number_format(2, '.', '') }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="title">Total Expenses</h5>
+                                    <span class="descr">All Time</span>
+                                </div>
+                                <div class="col text-right">
+                                    <div class="number text-danger">{{ common.info.currency_abbr }}{{ main_stats.expense + main_stats.salary|number_format(2, '.', '') }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-head">
+                <div class="panel-title">Expenses</div>
+            </div>
+            <div class="panel-body">
+                <canvas id="expense-chart" width="1000" height="450"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-head">
+                <div class="panel-title">Expense By type</div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <canvas id="expense-type-chart" width="1000" height="450"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-head">
+                <div class="panel-title">Salary</div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <canvas id="salary-chart" width="1000" height="450"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-head">
+                <div class="panel-title">Purchase</div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <canvas id="purchase-chart" width="1000" height="450"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-head">
+                <div class="panel-title">Transaction</div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <canvas id="transaction-chart" width="1000" height="450"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-head">
+                <div class="panel-title">Customer</div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <canvas id="customer-chart" width="1000" height="450"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-head">
+        <div class="panel-title">Notices</div>
+    </div>
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-middle table-bordered table-striped datatable-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for notice in notices %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td class="text-primary">{{ notice.title }}</td>
+                            <td>{{ notice.description }}</td>
+                            <td>{{ notice.start_date|date(common.info.date_format) }}</td>
+                            <td>{{ notice.end_date|date(common.info.date_format) }}</td>
+                            <td>
+                                {% if notice.status == 1 %}
+                                    <span class="label label-success">Active</span>
+                                {% elseif notice.status == 0 %}
+                                    <span class="label label-danger">Inactive</span>
+                                {% endif %}
+                            </td>
+                            <td class="table-action">
+                                <a class="text-primary edit" href="{{ common.info.url_route }}noticeboard/view&id={{ notice.id }}"><i class="las la-laptop"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% autoescape 'html' %}
+    <input type="hidden" class="invoice-chart-data" value="{{ chart_invoice|json_encode() }}">
+    <input type="hidden" class="bill-chart-data" value="{{ chart_bill|json_encode() }}">
+    <input type="hidden" class="expense-chart-data" value="{{ chart_expense|json_encode() }}">
+    <input type="hidden" class="expense-type-chart-data" value="{{ chart_expense_type|json_encode() }}">
+    <input type="hidden" class="purchase-chart-data" value="{{ chart_purchase|json_encode() }}">
+    <input type="hidden" class="salary-chart-data" value="{{ chart_salary|json_encode() }}">
+    <input type="hidden" class="transaction-chart-data" value="{{ chart_transaction|json_encode() }}">
+    <input type="hidden" class="customer-chart-data" value="{{ chart_customer|json_encode() }}">
+{% endautoescape %}
+<link rel="stylesheet" href="public/css/chart.min.css">
+<script type="text/javascript" src="public/js/Chart.min.js"></script>
+<script type="text/javascript" src="public/js/dashboard.js"></script>
+<!-- Footer -->
+{{ include('common/footer.twig') }}

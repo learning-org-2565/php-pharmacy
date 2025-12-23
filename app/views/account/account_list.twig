@@ -1,0 +1,83 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-4">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-sm-8 text-right">
+			<div class="dropdown d-inline-block mr-2">
+				<a class="btn btn-white btn-sm dropdown-toggle" data-toggle="dropdown"><i class="las la-cloud-download-alt text-primary pr-2"></i> Export</a>
+				<ul class="dropdown-menu dropdown-menu-right export-button">
+					<li><a href="#" class="excel"><i class="las la-file-excel pr-2"></i>Excel</a></li>
+					<li><a href="#" class="csv"><i class="las la-file-csv pr-2"></i>CSV</a></li>
+					<li><a href="#" class="print"><i class="las la-file-csv pr-2"></i>Print</a></li>
+					<li><a href="#" class="copy"><i class="las la-copy pr-2"></i>Copy</a></li>
+				</ul>
+			</div>
+			{% if page_add %}
+			<a href="{{ common.info.url_route }}account/add" class="btn btn-primary btn-sm"><i class="las la-plus pr-2"></i> New Account</a>
+			{% endif %}
+		</div>
+	</div>
+</div>
+<div class="panel panel-default">
+	<div class="panel-body">
+		<div class="table-responsive">
+			<table class="table table-middle table-bordered table-striped datatable-table">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Account Name</th>
+						<th>Bank Name</th>
+						<td>Account No</td>
+						<td>Initial Balance</td>
+						<td>Balance</td>
+						<th>Status</th>
+						{% if page_edit or page_delete %}
+						<th></th>
+						{% endif %}
+					</tr>
+				</thead>
+				<tbody>
+					{% for value in result %}
+					<tr>
+						<td>{{ loop.index }}</td>
+						<td class="text-primary">{{ value.account_name }}</td>
+						<td>{{ value.bank_name }}</td>
+						<td>{{ value.account_no }}</td>
+						<td>{{ common.info.currency_abbr~value.initial_balance }}</td>
+						<td>{{ common.info.currency_abbr }}{{ value.credit - value.debit }}</td>
+						<td>
+							{% if value.status == 1 %}
+							<span class="label label-success">Active</span>
+							{% elseif value.status == 0 %}
+							<span class="label label-danger">Inactive</span>
+							{% endif %}
+						</td>
+						{% if page_edit or page_delete %}
+						<td class="table-action">
+							{% if page_edit %}
+							<a href="{{ common.info.url_route~'account/edit&id='~value.id }}" class="text-primary edit" data-toggle="tooltip" title="Edit"><i class="las la-edit"></i></a>
+							{% endif %}
+							{% if page_delete %}
+							<a class="table-delete text-danger delete" data-toggle="tooltip" title="Delete">
+								<i class="las la-trash-alt"></i><input type="hidden" value="{{ value.id }}">
+							</a>
+							{% endif %}
+						</td>
+						{% endif %}
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% if page_delete %}{{ include('common/delete_modal.twig') }}{% endif %}
+{{ include('common/footer.twig') }}

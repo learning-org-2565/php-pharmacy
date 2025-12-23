@@ -1,0 +1,330 @@
+{{ include('common/header.twig') }}
+<script type='text/javascript' src='public/js/invoice.js'></script>
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-12">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}invoices">Invoices</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<form action="{{ action }}" method="post">
+	<div class="panel panel-default">
+		<input type="hidden" name="_token" value="{{ common.token }}">
+		<input type="hidden" name="invoice[id]" value="{{ result.id }}">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label class="col-form-label">Customer Name <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-user"></i></span></div>
+							<input type="text" name="invoice[name]" class="form-control customer-name" value="{{ result.name }}" placeholder="Seach Customer Name or Enter . . ." required>
+							<input type="hidden" name="invoice[customer_id]" class="form-control customer-id" value="{{ result.customer_id }}">
+						</div>
+					</div>	
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="col-form-label">Customer Email Address <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-envelope"></i></span></div>
+							<input type="text" name="invoice[email]" class="form-control customer-mail" value="{{ result.email }}" placeholder="Enter Customer Email Address . . ." required>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="col-form-label">Customer Mobile No.</label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-mobile"></i></span></div>
+							<input type="text" name="invoice[mobile]" class="form-control customer-mobile" value="{{ result.mobile }}" placeholder="Enter Customer Mobile No . . .">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label class="col-form-label">Payment Method</label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-credit-card"></i></span></div>
+							<select name="invoice[method]" class="custom-select" required>
+								{% for value in payment_method %}
+								    <option value="{{ value.id }}" {{ value.id == result.method ? 'selected' : false }}>{{ value.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="col-form-label">Invoice Date <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-calendar"></i></span></div>
+							<input type="text" name="invoice[invoicedate]" class="form-control date" value="{{ result.invoicedate|date(common.info.date_format) }}" placeholder="Invoice Date" required>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="col-form-label">Due Date <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-calendar"></i></span></div>
+							<input type="text" name="invoice[duedate]" class="form-control date" value="{{ result.duedate|date(common.info.date_format) }}" placeholder="Due Date" required>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label class="col-form-label">Payment Status <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-check-square"></i></span></div>
+							<select name="invoice[status]" id="" class="custom-select" required>
+								<option value="Paid" {{ result.status == "Paid" ? 'selected' : false }}>Paid</option>
+								<option value="Partially Paid" {{ result.status == "Partially Paid" ? 'selected' : false }}>Partially Paid</option>
+								<option value="Unpaid" {{ result.status == "Unpaid" ? 'selected' : false }}>Unpaid</option>
+								<option value="Pending" {{ result.status == "Pending" ? 'selected' : false }}>Pending</option>
+								<option value="In Process" {{ result.status == "In Process" ? 'selected' : false }}>In Process</option>
+								<option value="Cancelled" {{ result.status == "Cancelled" ? 'selected' : false }}>Cancelled</option>
+								<option value="Other" {{ result.status == "Other" ? 'selected' : false }}>Other</option>
+								<option value="Unknown" {{ result.status == "Unknown" ? 'selected' : false }}>Unknown</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="col-form-label">Invoice Status <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-check-square"></i></span></div>
+							<select name="invoice[inv_status]" class="custom-select" required>
+								<option value="0" {{ result.inv_status == "0" ? 'selected' : false }}>Draft</option>
+								<option value="1" {{ result.inv_status == "1" ? 'selected' : false }}>Published</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="invoice-items table-responsive pt-3 pb-5">
+				<table class="table-input">
+					<thead>
+						<tr>
+							<th>Item Name <span class="form-required">*</span></th>
+							<th>Item Description</th>
+							<th>Quantity <span class="form-required">*</span></th>
+							<th>Unit Cost <span class="form-required">*</span></th>
+							<th>Discount</th>
+							<th>Tax</th>
+							<th>Price</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for key, value in result.items %}
+							<tr class="item-row">
+								<td>
+									<textarea name="invoice[item][{{ loop.index0 }}][name]" class="item-name" required>{{ value.name }}</textarea>
+								</td>
+								<td class="invoice-item">
+									<textarea name="invoice[item][{{ loop.index0 }}][descr]" class="item-descr">{{ value.descr|raw }}</textarea>
+								</td>
+								<td class="">
+									<textarea type="text" name="invoice[item][{{ loop.index0 }}][quantity]" class="item-quantity" required>{{ value.quantity }}</textarea>
+								</td>
+								<td class="">
+									<textarea type="text" name="invoice[item][{{ loop.index0 }}][cost]" class="item-cost" required>{{ value.cost }}</textarea>
+								</td>
+								<td class="">
+                                    <div class="row no-gutters">
+                                        <div class="col">
+                                            <select name="invoice[item][{{ loop.index0 }}][discounttype]" class="custom-select border-light item-discounttype">
+                                                <option value="1"{% if value.discounttype == '1' %} selected{% endif %}>%</option>
+                                                <option value="2"{% if value.discounttype == '2' %} selected{% endif %}>Flat</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <textarea type="text" name="invoice[item][{{ loop.index0 }}][discount]" class="item-discount">{{ value.discount }}</textarea>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="invoice[item][{{ loop.index0 }}][discountvalue]" class="item-discountvalue" value="{{ value.discountvalue }}">
+                                </td>
+								<td class="invoice-tax">
+									{% for tax in value.tax %}
+										<p class="badge badge-light badge-sm badge-pill">{{ tax.name }}
+											<input type="text" name="invoice[item][{{ key }}][tax][{{ loop.index0 }}][tax_price]" class="single-tax-price" value="{{ tax.tax_price }}" readonly>
+											<input type="hidden" name="invoice[item][{{ key }}][tax][{{ loop.index0 }}][id]" class="invoice-tax-id" value="{{ tax.id }}"> 
+											<input type="hidden" name="invoice[item][{{ key }}][tax][{{ loop.index0 }}][name]" value="{{ tax.name }}">
+											<input type="hidden" class="invoice-tax-rate" name="invoice[item][{{ key }}][tax][{{ loop.index0 }}][rate]" value="{{ tax.rate }}">
+										</p>									    
+									{% endfor %}
+									<input type="hidden" name="invoice[item][{{ loop.index0 }}][taxprice]" class="item-tax-price" value="{{ value.taxprice }}" readonly>
+								</td>
+								<td>
+									<textarea type="text" name="invoice[item][{{ loop.index0 }}][price]" class="item-total-price" readonly>{{ value.price }}</textarea>
+									<input type="hidden" class="item-price" value="{{ value.price }}">
+								</td>
+								<td>
+									<a class="badge badge-warning badge-sm badge-pill add-taxes m-1">Add Taxes</a>
+									<a class="badge badge-danger badge-sm badge-pill delete m-1">Delete</a>
+								</td>
+							</tr>
+						{% else %}
+							<tr class="item-row">
+								<td class="">
+									<textarea name="invoice[item][0][name]" class="item-name" required></textarea>
+								</td>
+								<td class="invoice-item">
+									<textarea name="invoice[item][0][descr]" class="item-descr"></textarea>
+								</td>
+								<td class="">
+									<textarea type="text" name="invoice[item][0][quantity]" class="item-quantity" required>1</textarea>
+								</td>
+								<td class="">
+									<textarea type="text" name="invoice[item][0][cost]" class="item-cost" required></textarea>
+								</td>
+								<td class="">
+                                    <div class="row no-gutters">
+                                        <div class="col">
+                                            <select name="invoice[item][0][discounttype]" class="custom-select border-light item-discounttype">
+                                                <option value="1">%</option>
+                                                <option value="2">Flat</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <textarea type="text" name="invoice[item][0][discount]" class="item-discount">0.00</textarea>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="invoice[item][0][discountvalue]" class="item-discountvalue" value="0.00">
+                                </td>
+								<td class="invoice-tax">
+									<input type="hidden" name="invoice[item][0][taxprice]" class="item-tax-price" value="0" readonly>
+								</td>
+								<td class="">
+									<textarea type="text" name="invoice[item][0][price]" class="item-total-price" readonly></textarea>
+									<input type="hidden" class="item-price">
+								</td>
+								<td>
+									<a class="badge badge-warning badge-sm badge-pill add-taxes m-1">Add Taxes</a>
+									<a class="badge badge-danger badge-sm badge-pill delete m-1">Delete</a>
+								</td>
+							</tr>
+						{% endfor %}
+						<tr>
+							<td colspan="4" class="p-2">
+								<div class="add-items d-inline-block">
+									<a class="btn btn-success btn-sm m-1"><i class="icon-plus mr-1"></i> Add Item</a>
+								</div>
+							</td>
+							<td colspan="2" class="total-line">
+								<label>Sub Total</label>
+							</td>
+							<td colspan="2" class="total-value">
+								<input type="text" name="invoice[subtotal]" class="form-transparent sub-total" value="{{ result.subtotal }}" readonly>
+							</td>
+						</tr>
+						<tr>
+                            <td colspan="4" class="blank"></td>
+                            <td colspan="2" class="total-line">
+                                <label>Discount</label>
+                            </td>
+                            <td colspan="2" class="total-value">
+                                <input type="text" name="invoice[discount_value]" class="form-transparent total-discount" value="{{ result.discount_value }}" readonly>
+                            </td>
+                        </tr>
+						<tr>
+							<td colspan="4" class="blank">
+							</td>
+							<td colspan="2" class="total-line">
+								<label>Tax</label>
+							</td>
+							<td colspan="2" class="total-value">
+								<input type="text" name="invoice[tax]" class="form-transparent tax-total" value="{{ result.tax }}" readonly>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="blank">
+							</td>
+							<td colspan="2" class="total-line">
+								<label>Total</label>
+							</td>
+							<td colspan="2" class="total-value">
+								<input type="text" name="invoice[amount]" class="form-transparent  total-amount" value="{{ result.amount }}" readonly>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="blank">
+							</td>
+							<td colspan="2" class="total-line">
+								<label>Paid</label>
+							</td>
+							<td colspan="2" class="total-value">
+								<input type="text" name="invoice[paid]" class="form-transparent paid-amount" value="{{ result.paid }}">
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="blank">
+							</td>
+							<td colspan="2" class="total-line">
+								<label>Due</label>
+							</td>
+							<td colspan="2" class="total-value">
+								<input type="text" name="invoice[due]" class="form-transparent due-amount" value="{{ result.due }}" readonly>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label>Customer Note</label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-paragraph"></i></span></div>
+							<textarea class="form-control" name="invoice[note]" rows="3">{% if result.id %}{{ result.note|raw }}{% else %}{{ common.info.invoice_cnote|raw }}{% endif %}</textarea>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label>Terms Conditions</label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-info-circle"></i></span></div>
+							<textarea class="form-control" name="invoice[tc]" rows="3">{% if result.id %}{{ result.tc|raw }}{% else %}{{ common.info.invoice_tc|raw }}{% endif %}</textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer text-center">
+			<button type="submit" name="submit" class="btn btn-primary"><i class="ti-save-alt pr-2"></i> Save</button>
+		</div>
+	</div>
+</form>
+<div class="modal fade" id="addTax">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Tax</h5>
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+			</div>
+			<div class="modal-body">
+				{% for value in taxes %}
+					<div class="custom-control custom-checkbox custom-checkbox-1 mb-3">
+						<input type="checkbox" class="custom-control-input" id="inv-taxes-{{ value.id }}" value="{{ value.id }}" data-rate="{{ value.rate }}" data-name="{{ value.name }}" name="modaltax">
+						<label class="custom-control-label" for="inv-taxes-{{ value.id }}">{{ value.name~'=>'~value.rate~'%' }}</label>
+					</div>
+				{% endfor %}
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary btn-pill add-modal-taxes">Add Taxes</button>
+			</div>
+		</div>
+	</div>
+</div>
+{{ include('common/footer.twig') }}

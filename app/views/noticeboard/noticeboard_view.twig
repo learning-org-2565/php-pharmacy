@@ -1,0 +1,32 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-8">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}noticeboard">Noticeboard</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-sm-4 text-right">
+			{% if page_edit %}
+				<a href="{{ common.info.url_route~'noticeboard/edit&id='~result.id }}" class="btn btn-sm btn-primary"><i class="las la-edit mr-2"></i> Edit</a>
+			{% endif %}
+		</div>
+	</div>
+</div>
+<div class="panel panel-default">
+	<div class="panel-head">
+		<div class="panel-title text-primary">{{ result.title }}</div>
+	</div>
+	<div class="panel-body">
+		<p class="mb-0">{{ result.description }}</p>
+	</div>
+	<div class="panel-footer">
+		<p class="mb-0 text-light font-12">Start : {{ result.start_date|date(common.info.date_format) }} End : {{ result.start_date|date(common.info.date_format) }}</p>
+	</div>
+</div>
+{{ include('common/footer.twig') }}

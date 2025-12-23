@@ -1,0 +1,163 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-12">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}medicines">Medicine</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<form action="{{ action }}" method="post">
+	<input type="hidden" name="_token" value="{{ common.token }}">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Medicine Name <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="las la-pills"></i></span>
+							</div>
+							<input type="text" name="medicine[name]" class="form-control" value="{{ result.name }}" placeholder="Enter Medicine Name . . .">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Medicine Category <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="las la-tag"></i></span>
+							</div>
+							<select name="medicine[category]" class="custom-select">
+								{% for value in category %}
+								    <option value="{{ value.id }}" {{ result.category == value.id ? 'selected' : false }}>{{ value.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Medicine Company <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="las la-building"></i></span>
+							</div>
+							<input type="text" name="medicine[company]" class="form-control" value="{{ result.company }}" placeholder="Enter Medicine Company . . .">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Medicine Generic <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="las la-mortar-pestle"></i></span>
+							</div>
+							<input type="text" name="medicine[generic]" class="form-control" value="{{ result.generic }}" placeholder="Enter Medicine Generic . . .">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Medicine Group</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="las la-object-group"></i></span>
+							</div>
+							<input type="text" name="medicine[medicine_group]" class="form-control" value="{{ result.medicine_group }}" placeholder="Enter Medicine Group . . .">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label>Unit<span class="form-required">*</span></label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-atom"></i></span>
+									</div>
+									<input type="text" name="medicine[unit]" class="form-control" value="{{ result.unit }}" placeholder="Enter Medicine unit . . .">
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label>Unit/Packing</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-atom"></i></span>
+									</div>
+									<input type="text" name="medicine[unitpacking]" class="form-control" value="{{ result.unitpacking }}" placeholder="Enter Unit/Packing . . .">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Store Box</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="las la-box"></i></span>
+							</div>
+							<input type="text" name="medicine[storebox]" class="form-control" value="{{ result.storebox }}" placeholder="Enter Store Box or Drawer . . .">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label>Min Level</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-level-down-alt"></i></span>
+									</div>
+									<input type="text" name="medicine[minlevel]" class="form-control" value="{{ result.minlevel }}" placeholder="Enter Min Level . . .">
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label>Re-Order Level</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="las la-level-down-alt"></i></span>
+									</div>
+									<input type="text" name="medicine[reorderlevel]" class="form-control" value="{{ result.reorderlevel }}" placeholder="Enter Re-Order Level . . .">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Note</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="las la-paragraph"></i></span>
+							</div>
+							<textarea name="medicine[note]" class="form-control" placeholder="Enter Note . . .">{{ result.note }}</textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="medicine[id]" value="{{ result.id }}">
+		<div class="panel-footer text-center">
+			<button type="submit" name="submit" class="btn btn-primary"><i class="ti-save-alt pr-2"></i> Save</button>
+		</div>
+	</div>
+</form>
+{{ include('common/footer.twig') }}

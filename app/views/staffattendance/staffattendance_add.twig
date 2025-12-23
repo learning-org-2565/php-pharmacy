@@ -1,0 +1,118 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-12">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}staffattendance">Attendance</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<form action="{{ action }}" class="panel panel-default" method="post">
+	<div class="panel-body">
+		<input type="hidden" name="_token" value="{{ common.token }}">
+		<div class="date_pick row">
+			<input type="hidden" name="day">
+			<input type="hidden" name="month">
+			<input type="hidden" name="year">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label>Select Date for Attendence <span class="form-required">*</span></label>
+					<input type="text" name="attendence_date" class="form-control bg-white attendence" required autocomplete="off" readonly>
+				</div>
+			</div>
+		</div>
+		<div class="table-responsive attendence-container d-none">
+			<table class="table table-middle table-bordered table-striped">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>User Info</th>
+						<th>User Role</th>
+						<th>
+							<div class="custom-control custom-checkbox d-inline-block mt-1 mb-1">
+								<input type="checkbox" class="custom-control-input attendence-head" id="attendence-head-P" value="P">
+								<label class="custom-control-label font-12" for="attendence-head-P">Persent</label>
+							</div>
+						</th>
+						<th>
+							<div class="custom-control custom-checkbox d-inline-block mt-1 mb-1">
+								<input type="checkbox" class="custom-control-input attendence-head" id="attendence-head-A" value="A">
+								<label class="custom-control-label font-12" for="attendence-head-A">Absent</label>
+							</div>
+						</th>
+						<th>
+							<div class="custom-control custom-checkbox d-inline-block mt-1 mb-1">
+								<input type="checkbox" class="custom-control-input attendence-head" id="attendence-head-L" value="L">
+								<label class="custom-control-label font-12" for="attendence-head-L">Late</label>
+							</div>
+						</th>
+						<th>
+							<div class="custom-control custom-checkbox d-inline-block mt-1 mb-1">
+								<input type="checkbox" class="custom-control-input attendence-head" id="attendence-head-H" value="H">
+								<label class="custom-control-label font-12" for="attendence-head-H">Holiday</label>
+							</div>
+						</th>
+						<th>
+							<div class="custom-control custom-checkbox d-inline-block mt-1 mb-1">
+								<input type="checkbox" class="custom-control-input attendence-head" id="attendence-head-OL" value="OL">
+								<label class="custom-control-label font-12" for="attendence-head-OL">OnLeave</label>
+							</div>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for value in result %}
+						<tr>
+							<td>{{ loop.index }}</td>
+							<td>
+								<p class="mb-0 text-primary">{{ value.name }}</p>
+								<p class="mb-0">{{ value.email }}</p>
+							</td>						
+							<td>{{ value.role }}</td>
+							<td>
+								<div class="custom-control custom-radio d-inline-block mt-1 mb-1">
+									<input type="radio" class="custom-control-input attendence-P" name="attendence[{{ value.user_id }}]" id="P-{{ value.user_id }}" value="P">
+									<label class="custom-control-label font-12" for="P-{{ value.user_id }}">Persent</label>
+								</div>
+							</td>
+							<td>
+								<div class="custom-control custom-radio d-inline-block mt-1 mb-1">
+									<input type="radio" class="custom-control-input attendence-A" name="attendence[{{ value.user_id }}]" id="A-{{ value.user_id }}" value="A">
+									<label class="custom-control-label font-12" for="A-{{ value.user_id }}">Absent</label>
+								</div>
+							</td>
+							<td>
+								<div class="custom-control custom-radio d-inline-block mt-1 mb-1">
+									<input type="radio" class="custom-control-input attendence-L" name="attendence[{{ value.user_id }}]" id="L-{{ value.user_id }}" value="L">
+									<label class="custom-control-label font-12" for="L-{{ value.user_id }}">Late</label>
+								</div>
+							</td>
+							<td>
+								<div class="custom-control custom-radio d-inline-block mt-1 mb-1">
+									<input type="radio" class="custom-control-input attendence-H" name="attendence[{{ value.user_id }}]" id="H-{{ value.user_id }}" value="H">
+									<label class="custom-control-label font-12" for="H-{{ value.user_id }}">Holiday</label>
+								</div>
+							</td>
+							<td>
+								<div class="custom-control custom-radio d-inline-block mt-1 mb-1">
+									<input type="radio" class="custom-control-input attendence-OL" name="attendence[{{ value.user_id }}]" id="OL-{{ value.user_id }}" value="OL">
+									<label class="custom-control-label font-12" for="OL-{{ value.user_id }}">On Leave</label>
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="panel-footer text-center attendence-submit d-none">
+		<button type="submit" name="submit" class="btn btn-primary"><i class="ti-save-alt pr-2"></i> Save</button>
+	</div>
+</form>
+{{ include('common/footer.twig') }}

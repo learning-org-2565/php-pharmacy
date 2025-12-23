@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>{{ common.name }} | Login</title>
+	<link rel="icon" type="image/x-icon" href="{{ theme.favicon }}">
+	<link rel="stylesheet" href="public/css/style.min.css" />
+	<script src="public/js/vendor.min.js"></script>
+	<script src="public/js/custom.js"></script>
+</head>
+<body>
+	<div class="lgn-background" style="background-image: url(public/uploads/{{ theme.lg_background }});">
+		<div class="lgn-wrapper">
+			<div class="lgn-logo text-center">
+				<a href="{{ common.url }}">
+					<img src="{{ theme.logo }}" alt="{{ common.name }}">
+				</a>
+			</div>
+			<div class="lgn-title">Sign In</div>
+			<div class="lgn-form">
+				<form class="form-vertical" action="{{ action }}" method="post">
+					{% if success %}
+					<div class="alert alert-success alert-dismissable">{{ success }}<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a></div>
+					{% endif %}
+					{% if error %}
+					<div class="alert alert-danger alert-dismissable">{{ error }}<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a></div>
+					{% endif %}
+					<input type="hidden" name="_token" value="{{ token }}">
+					<div class="lgn-input form-group">
+						<label class="control-label">Username</label>
+						<input class="form-control" type="text" name="username" id="lgn-mail" placeholder="Enter your Username" autocomplete="off" required>
+					</div>
+					<div class="lgn-input form-group">
+						<label class="control-label">Password</label>
+						<input type="password" name="password" id="lgn-pass" class="form-control" placeholder="Enter your Password" autocomplete="off" required>
+						<div class="lgn-forgot text-right">
+							<a href="{{ common.url_route }}forgotpassword" class="text-primary">Forgot Password?</a>
+						</div>
+					</div>
+					<div class="lgn-input form-group">
+						<label class="control-label">What is {{ first_number }} plus {{ second_number }} =</label>
+						<input type="text" id="lgn-bot" class="form-control" placeholder="Answer" autocomplete="off" required>
+					</div>
+					<div class="lgn-submit text-center">
+						<button type="submit" id="lgn-submit" class="btn btn-primary" name="login">Login</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+

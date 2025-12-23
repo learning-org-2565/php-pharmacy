@@ -1,0 +1,94 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+    <div class="row align-items-center">
+        <div class="col-sm-4">
+            <h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+            <div class="breadcrumbs d-inline-block">
+                <ul>
+                    <li><a href="{{ common.info.url }}">Dashboard</a></li>
+                    <li>{{ page_title }}</li>
+                </ul>
+            </div>
+        </div>
+		<div class="col-sm-8 text-right">
+			<div class="btn btn-white btn-sm text-left mr-2">
+                <i class="las la-filter text-danger pr-2"></i>
+                <input type="text" class="table-date-range" data-start="{{ period.start|date(common.info.date_format) }}" data-end="{{ period.end|date(common.info.date_format) }}" data-route="reports&name=salary">
+            </div>
+            <div class="dropdown d-inline-block mr-2">
+                <a class="btn btn-white btn-sm dropdown-toggle" data-toggle="dropdown"><i class="las la-cloud-download-alt text-primary pr-2"></i> Toggle column</a>
+                <ul class="dropdown-menu dropdown-menu-right toggle-button">
+                    <li><a data-column="0"><i class="las la-toggle-on pr-2"></i><span>#</span></a></li>
+                    <li><a data-column="1"><i class="las la-toggle-on pr-2"></i><span>Name</span></a></li>
+                    <li><a data-column="2"><i class="las la-toggle-on pr-2"></i><span>Month</span></a></li>
+                    <li><a data-column="3"><i class="las la-toggle-on pr-2"></i><span>Date</span></a></li>
+                    <li><a data-column="4"><i class="las la-toggle-on pr-2"></i><span>Gross Salary</span></a></li>
+                    <li><a data-column="5"><i class="las la-toggle-on pr-2"></i><span>Net Salary</span></a></li>
+                    <li><a data-column="6"><i class="las la-toggle-on pr-2"></i><span>Advance</span></a></li>
+                    <li><a data-column="7"><i class="las la-toggle-on pr-2"></i><span>Deduction</span></a></li>
+                    <li><a data-column="8"><i class="las la-toggle-on pr-2"></i><span>Net Salary</span></a></li>
+                    <li><a data-column="9"><i class="las la-toggle-on pr-2"></i><span>Payment Amount</span></a></li>
+                </ul>
+            </div>
+            <div class="dropdown d-inline-block mr-2">
+                <a class="btn btn-white btn-sm dropdown-toggle" data-toggle="dropdown"><i class="las la-cloud-download-alt text-primary pr-2"></i> Export</a>
+                <ul class="dropdown-menu dropdown-menu-right export-button">
+                 <li><a href="#" class="pdf"><i class="las la-file-pdf pr-2"></i>PDF</a></li>
+                 <li><a href="#" class="excel"><i class="las la-file-excel pr-2"></i>Excel</a></li>
+                 <li><a href="#" class="csv"><i class="las la-file-csv pr-2"></i>CSV</a></li>
+                 <li><a href="#" class="print"><i class="las la-print pr-2"></i>Print</a></li>
+                 <li><a href="#" class="copy"><i class="las la-copy pr-2"></i>Copy</a></li>
+             </ul>
+         </div>
+     </div>
+ </div>
+</div>
+
+<div class="panel panel-default"> 
+    <div class="panel-body">
+        <table class="table table-middle table-bordered table-striped datatable-count-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Month</th>
+                    <th>Date</th>
+                    <th>Gross Salary</th>
+                    <th>Net Salary</th>
+                    <th>Advance</th>
+                    <th>Deduction</th>
+                    <th>Paid Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for value in result %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td class="text-primary">{{ value.name }}</td>
+                        <td>{{ value.month_year|date(common.info.date_my_format) }}</td>
+                        <td>{{ value.date_of_joining|date(common.info.date_format) }}</td>
+                        <td>{{ common.info.currency_abbr~value.gross_salary }}</td>
+                        <td>{{ common.info.currency_abbr~value.net_salary }}</td>
+                        <td>{{ common.info.currency_abbr~value.advance }}</td>
+                        <td>{{ common.info.currency_abbr~value.deduction }}</td>
+                        <td>{{ common.info.currency_abbr~value.amount }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+{{ include('common/footer.twig') }}

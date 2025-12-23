@@ -1,0 +1,253 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-12">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}medicine/purchase">Purchase</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<form action="{{ action }}" method="post">
+	<input type="hidden" name="_token" value="{{ common.token }}">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Suppliers <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-id-card"></i></span></div>
+							<select name="purchase[supplier]" class="custom-select" required>
+								<option value="">Select Suppliers</option>
+								{% for value in suppliers %}
+									<option value="{{ value.id }}" {{ result.supplier == value.id ? 'selected' : false }}>{{ value.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label>Purchase Date <span class="form-required">*</span></label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-calendar-alt"></i></span></div>
+							<input type="text" name="purchase[date]" class="form-control bg-white date" value="{{ result.date|date(common.info.date_format) }}" placeholder="Purchase Date" readonly required>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Note</label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="las la-paragraph"></i></span></div>
+							<textarea name="purchase[note]" class="form-control" placeholder="Enter Note or Comment . . .">{{ result.note }}</textarea>
+						</div>
+					</div>	
+				</div>
+			</div>
+			<div class="purchase-items">
+				<table class="table table-input">
+					<thead> 
+						<tr>
+							<th>Name<span class="form-required">*</span></th>
+							<th>Batch No<span class="form-required">*</span></th>
+							<th>Expiry Date<span class="form-required">*</span></th>
+							<th>Packing Qty</th>
+							<th>Quantity<span class="form-required">*</span></th>
+							<th>Purchase Price<span class="form-required">*</span></th>
+							<th>Sale Price<span class="form-required">*</span></th>
+							<th>Discount</th>
+							<th>Tax</th>
+							<th>Price<span class="form-required">*</span></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for key, value in batches %} 
+							<tr class="item-row">
+								<td>
+									<textarea class="item-name" name="purchase[items][{{ key }}][name]" required>{{ value.name }}</textarea>
+									<input type="hidden" class="item-id" name="purchase[items][{{ key }}][medicine_id]" value="{{ value.medicine_id }}" required>
+									<input type="hidden" name="purchase[items][{{ key }}][id]" value="{{ value.id }}" required>
+								</td>
+								<td>
+									<textarea class="item-batch" name="purchase[items][{{ key }}][batch]" required>{{ value.batch }}</textarea>
+								</td>
+								<td>
+									<input type="text" class="item-expiry exp-date p-2 datetimepicker-input" name="purchase[items][{{ key }}][expiry]" value="{{ value.expiry|date(common.info.date_my_format) }}" required>
+								</td>
+								<td>
+									<textarea class="item-pqty" name="purchase[items][{{ key }}][pqty]">{{ value.pqty }}</textarea>
+								</td>
+								<td>
+									<textarea class="item-qty" name="purchase[items][{{ key }}][qty]" required>{{ value.qty }}</textarea>
+								</td>
+								<td>
+									<textarea class="item-purchaseprice" name="purchase[items][{{ key }}][purchaseprice]" required>{{ value.purchaseprice }}</textarea>
+								</td>
+								<td>
+									<textarea class="item-saleprice" name="purchase[items][{{ key }}][saleprice]" required>{{ value.saleprice }}</textarea>
+								</td>
+								<td class="">
+                                    <div class="row no-gutters">
+                                        <div class="col">
+                                            <select name="purchase[items][{{ key }}][discounttype]" class="custom-select border-light item-discounttype">
+                                                <option value="1"{% if value.discounttype == '1' %} selected{% endif %}>%</option>
+                                                <option value="2"{% if value.discounttype == '2' %} selected{% endif %}>Flat</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <textarea type="text" name="purchase[items][{{ key }}][discount]" class="item-discount">{{ value.discount }}</textarea>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="purchase[items][{{ key }}][discountvalue]" class="item-discountvalue" value="{{ value.discountvalue }}">
+                                </td>
+								<td class="invoice-tax">
+									{% for tax in value.tax %}
+										<p class="badge badge-light badge-sm badge-pill">{{ tax.name }}
+											<input type="text" name="purchase[items][{{ key }}][tax][{{ loop.index0 }}][tax_price]" class="single-tax-price" value="{{ tax.tax_price }}" readonly>
+											<input type="hidden" name="purchase[items][{{ key }}][tax][{{ loop.index0 }}][id]" class="invoice-tax-id" value="{{ tax.id }}"> 
+											<input type="hidden" name="purchase[items][{{ key }}][tax][{{ loop.index0 }}][name]" value="{{ tax.name }}">
+											<input type="hidden" class="invoice-tax-rate" name="purchase[items][{{ key }}][tax][{{ loop.index0 }}][rate]" value="{{ tax.rate }}">
+										</p>
+									{% endfor %}
+									
+									<input type="hidden" class="item-tax-price" name="purchase[items][{{ key }}][taxprice]" value="{{ value.taxprice }}" readonly>
+								</td>
+								<td>
+									<textarea class="bg-white item-price" name="purchase[items][{{ key }}][price]" required readonly>{{ value.price }}</textarea>
+								</td>
+								<td>
+									<a class="badge badge-warning badge-sm badge-pill add-taxes m-1">Add Taxes</a>
+									<a class="badge badge-danger badge-sm badge-pill delete m-1">Delete</a>
+								</td>
+							</tr>
+						{% else %}
+							<tr class="item-row">
+								<td>
+									<textarea class="item-name" name="purchase[items][0][name]" required></textarea>
+									<input type="hidden" class="item-id" name="purchase[items][0][medicine_id]" required>
+									<input type="hidden" name="purchase[items][0][id]" required>
+								</td>
+								<td>
+									<textarea class="item-batch" name="purchase[items][0][batch]" required></textarea>
+								</td>
+								<td>
+									<input type="text" class="item-expiry exp-date p-2 datetimepicker-input" name="purchase[items][0][expiry]" required>
+								</td>
+								<td>
+									<textarea class="item-pqty" name="purchase[items][0][pqty]"></textarea>
+								</td>
+								<td>
+									<textarea class="item-qty" name="purchase[items][0][qty]" required></textarea>
+								</td>
+								<td>
+									<textarea class="item-purchaseprice" name="purchase[items][0][purchaseprice]" required></textarea>
+								</td>
+								<td>
+									<textarea class="item-saleprice" name="purchase[items][0][saleprice]" required></textarea>
+								</td>
+								<td class="">
+                                    <div class="row no-gutters">
+                                        <div class="col">
+                                            <select name="purchase[items][0][discounttype]" class="custom-select border-light item-discounttype">
+                                                <option value="1">%</option>
+                                                <option value="2">Flat</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <textarea type="text" name="purchase[items][0][discount]" class="item-discount">0.00</textarea>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="purchase[items][0][discountvalue]" class="item-discountvalue" value="0.00">
+                                </td>
+								<td class="invoice-tax">
+									<input type="hidden" class="item-tax-price" name="purchase[items][0][taxprice]" value="0" readonly>
+								</td>
+								<td>
+									<textarea class="bg-white item-price" name="purchase[items][0][price]" required readonly></textarea>
+								</td>
+								<td>
+									<a class="badge badge-warning badge-sm badge-pill add-taxes m-1">Add Taxes</a>
+									<a class="badge badge-danger badge-sm badge-pill delete m-1">Delete</a>
+								</td>
+							</tr>
+						{% endfor %}
+						<tr>
+							<td colspan="11">
+								<div class="add-items d-inline-block">
+									<a class="btn btn-success btn-sm m-1"><i class="icon-plus mr-1"></i> Add Item</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="blank"></td>
+							<td colspan="3" class="total-line"><label class="p-2">Sub Total</label></td>
+							<td colspan="4" class="total-value">
+								<input type="text" name="purchase[total]" class="form-transparent p-2 total-price" value="{{ result.total }}" readonly>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="blank"></td>
+							<td colspan="3" class="total-line"><label class="p-2">Discount</label></td>
+							<td colspan="4" class="total-value">
+								<input type="text" name="purchase[discount_value]" class="form-transparent p-2 total-discount" value="{{ result.discount_value }}" readonly>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="blank"></td>
+							<td colspan="3" class="total-line"><label class="p-2">Tax</label></td>
+							<td colspan="4" class="total-value">
+								<input type="text" name="purchase[tax]" class="form-transparent p-2 total-tax" value="{{ result.tax }}" readonly>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="blank"></td>
+							<td colspan="3" class="total-line"><label class="p-2">Amount</label></td>
+							<td colspan="4" class="total-value">
+								<input type="text" name="purchase[amount]" class="form-transparent p-2 total-amount" value="{{ result.amount }}" readonly>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<input type="hidden" name="purchase[id]" value="{{ result.id }}">
+		<div class="panel-footer text-center">
+			<button type="submit" name="submit" class="btn btn-primary"><i class="ti-save-alt pr-2"></i> Save</button>
+		</div>
+	</div>
+</form>
+
+<div class="modal fade" id="addTax">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Tax</h5>
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+			</div>
+			<div class="modal-body">
+				{% for value in taxes %}
+					<div class="custom-control custom-checkbox custom-checkbox-1 mb-3">
+						<input type="checkbox" class="custom-control-input" id="inv-taxes-{{ value.id }}" value="{{ value.id }}" data-rate="{{ value.rate }}" data-name="{{ value.name }}" name="modaltax">
+						<label class="custom-control-label" for="inv-taxes-{{ value.id }}">{{ value.name~'( '~value.rate~'% )' }}</label>
+					</div>
+				{% endfor %}
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning add-modal-taxes">Add Taxes</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<link rel="stylesheet" href="public/css/bootstrap-datetimepicker.min.css">
+<script type="text/javascript" src="public/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="public/js/purchase.js"></script>
+<!-- Footer -->
+{{ include('common/footer.twig') }}

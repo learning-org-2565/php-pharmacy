@@ -1,0 +1,120 @@
+{{ include('common/header.twig') }}
+<div class="page-title">
+	<div class="row align-items-center">
+		<div class="col-sm-7">
+			<h2 class="page-title-text d-inline-block">{{ page_title }}</h2>
+			<div class="breadcrumbs d-inline-block">
+				<ul>
+					<li><a href="{{ common.info.url }}">Dashboard</a></li>
+					<li><a href="{{ common.info.url_route }}medicine/purchase">Purchase</a></li>
+					<li>{{ page_title }}</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-sm-5 text-right">
+			{% if page_pdf %}
+				<a href="{{ common.info.url_route~'medicine/purchase/pdf&id='~result.id }}" class="btn btn-danger btn-sm" target="_blank"><i class="las la-file-pdf mr-2"></i>PDF/Print</a>
+			{% endif %}
+			{% if page_edit %}
+				<a href="{{ common.info.url_route~'medicine/purchase/edit&id='~result.id }}" class="btn btn-primary btn-sm"><i class="las la-edit mr-2"></i>Edit</a>
+			{% endif %}
+		</div>
+	</div>
+</div>
+<div class="inv-template mb-4">
+	<div class="inv-template-bdy table-responsive p-4">
+		<div class="meta table-responsive" style="border-top: 0">
+			<table>
+				<tbody>
+					<tr>
+						<td class="bill-to v-aling-bottom">
+							<div class="heading">Supplier</div>
+							<div class="title">{{ result.name }}</div>
+							<div class="text">{{ result.email }}</div>
+							<div class="text">{{ result.phone }}</div>
+						</td>
+						<td class="info v-aling-bottom">
+							<table class="text-right">
+								<tbody>
+									<tr>
+										<td class="text">#</td>
+										<td class="text w-min-130">{{ common.info.invoice_prefix~"%05d"|format(result.id) }}</td>
+									</tr>
+									<tr>
+										<td class="text">Purchase Date</td>
+										<td class="text w-min-130">{{ result.date|date(common.info.date_format) }}</td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="item table-responsive">
+			<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>BatchNo</th>
+						<th>ExpiryDate</th>
+						<th>PackingQty</th>
+						<th>Quantity</th>
+						<th>PurchasePrice</th>
+						<th>SalePrice</th>
+						<th>Discount</th>
+						<th>Tax</th>
+						<th>Price</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for value in batches %}
+					<tr>
+						<td>{{ value.name }}</td>
+						<td>{{ value.batch }}</td>
+						<td>{{ value.expiry|date(common.info.date_my_format) }}</td>
+						<td>{{ value.pqty }}</td>
+						<td>{{ value.qty }}</td>
+						<td>{{ value.purchaseprice }}</td>
+						<td>{{ value.saleprice }}</td>
+						<td>{{ value.discountvalue }}</td>
+						<td>{{ value.taxprice }}</td>
+						<td>{{ value.price }}</td>
+					</tr>
+					{% endfor %}
+					<tr class="total">
+						<td rowspan="5" colspan="6" class="blank">
+						</td>
+						<td class="title" colspan="2">Sub Total</td>
+						<td class="value" colspan="2">{{ common.info.currency_abbr~result.total }}</td>
+					</tr>
+					<tr class="total">
+						<td class="title" colspan="2">Tax</td>
+						<td class="value" colspan="2">{{ common.info.currency_abbr~result.tax }}</td>
+					</tr>
+					<tr class="total">
+						<td class="title" colspan="2">Discount</td>
+						<td class="value" colspan="2">{{ common.info.currency_abbr~result.discount_value }}</td>
+					</tr>
+					<tr class="total">
+						<td class="title" colspan="2">Amount</td>
+						<td class="value" colspan="2">{{ common.info.currency_abbr~result.amount }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="note">
+			<table>
+				<tbody>
+					<tr>
+						<td class="block align-top">
+							<span>Note</span>
+							<p>{{ result.note }}</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{{ include('common/footer.twig') }}

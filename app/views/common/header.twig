@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ page_title~' | '~common.info.name }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ common.theme.favicon }}">
+    <!-- Include css files -->
+    <link rel="stylesheet" href="public/css/jquery.fancybox.min.css">
+    <link rel="stylesheet" type="text/css" href="public/css/style.min.css" />
+    <!-- Include js files -->
+    <script type="text/javascript" src="public/js/vendor.min.js"></script>
+    <script type="text/javascript" src="public/js/jquery.fancybox.min.js"></script>
+    <script type="text/javascript" src="public/js/admin.js"></script>
+</head>
+<body>
+    {% autoescape %}
+    <div class="wrapper {% if common.theme.layout %} {{ common.theme.layout }} {% endif %}">
+        <!-- Main Container -->
+        <div id="main-wrapper" class="{% if common.theme.layout_fixed %} {{ common.theme.layout_fixed }} {% endif %} {% if common.theme.side_menu %} menu-{{ common.theme.side_menu }} {% endif %} {% if common.theme.layout_menu %} {{ common.theme.layout_menu }} {% endif %}">
+            <!-- Media Modal -->
+            <div id="media-upload" class="modal fade">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="media-hdr"><p>Media <span>(Click On Image To Select)</span></p></div>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="media-upload-container">
+                                <form action="{{ common.info.url_route }}media/upload" class="dropzone" id="media-dropzone" method="post" enctype="multipart/form-data"><div class="fallback"><input name="file" type="file" /></div></form>
+                            </div>
+                            <div class="media-all pt-3"></div>
+                            <input type="hidden" class="uploaded" value="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Menu Wrapper -->
+            <div class="menu-wrapper">
+                <div class="menu">{{ common.admin_menu | raw }}</div>
+            </div>
+            <div class="page-hdr {{ common.theme.header_color }}">
+                <div class="row align-items-center">
+                    <div class="col-4 col-md-7 page-hdr-left">
+                        <!-- Logo Container -->
+                        <div id="logo">
+                            <div class="logo-icon">
+                                <a href="#"><img src="{{ common.theme.logo_icon }}" alt="Icon"></a>
+                            </div>
+                            <div class="logo">
+                                <a href="#"><img src="{{ common.theme.logo }}" alt="Logo"></a>
+                            </div>
+                        </div>
+                        {% if common.page_search %}
+                        <div class="page-search ml-4">
+                            <input type="text" placeholder="Search Customer by Name or Mobile number ...">
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-8 col-md-5 page-hdr-right">
+                        <div class="page-hdr-desktop">
+                            {% if common.new_bill %}
+                            <div class="page-menu">
+                                <a href="{{ common.info.url_route }}medicine/billing/add" class="active" data-toggle="tooltip" data-placement="bottom" title="New POS/Bill"><i class="las las la-cart-plus"></i></a>
+                            </div>
+                            {% endif %}
+                            {% if common.new_purchase %}
+                            <div class="page-menu">
+                                <a href="{{ common.info.url_route }}medicine/purchase/add" data-toggle="tooltip" data-placement="bottom" title="New Purchase"><i class="las la-file-invoice-dollar font-20"></i></a>
+                            </div>
+                            {% endif %}
+                            {% if common.new_transaction %}
+                            <div class="page-menu">
+                                <a href="{{ common.info.url_route }}account/transaction/add" data-toggle="tooltip" data-placement="bottom" title="New Transaction"><i class="las la-book"></i></a>
+                            </div>
+                            {% endif %}
+                            {% if common.new_customer %}
+                            <div class="page-menu">
+                                <a href="{{ common.info.url_route }}customer/add" data-toggle="tooltip" data-placement="bottom" title="New Customer"><i class="las la-user-md"></i></a>
+                            </div>
+                            {% endif %}
+                            {% if common.live_stock %}
+                            <div class="page-menu menu-dropdown-wrapper menu-user">
+                                <a><i class="las la-balance-scale"></i></a>
+                                <div class="menu-dropdown menu-dropdown-right menu-dropdown-push-right">
+                                    <div class="arrow arrow-right"></div> 
+                                    <div class="menu-dropdown-inner">
+                                        <div class="menu-dropdown-head">Stock adjustment</div>
+                                        <div class="menu-dropdown-body p-2">
+                                            <ul class="menu-nav">
+                                                <li><a href="{{ common.info.url_route }}medicine/stock&type=live"><i class="las la-hourglass"></i><span>Live Stock</span></a></li>
+                                                <li><a href="{{ common.info.url_route }}medicine/stock&type=expired"><i class="las la-hourglass-end"></i><span>Expired Stock</span></a></li>
+                                                <li><a href="{{ common.info.url_route }}medicine/stock&type=willexpirein1"><i class="las la-hourglass-end"></i><span>Expire in 1 Month</span></a></li>
+                                                <li><a href="{{ common.info.url_route }}medicine/stock&type=willexpirein2"><i class="las la-hourglass-half"></i><span>Expire in 2 Month</span></a></li>
+                                                <li><a href="{{ common.info.url_route }}medicine/stock&type=willexpirein3"><i class="las la-hourglass-start"></i><span>Expire in 3 Month</span></a></li>
+                                                <li><a href="{{ common.info.url_route }}medicine/stock&type=willexpirein6"><i class="las la-hourglass-start"></i><span>Expire in 6 Month</span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            <div class="page-menu menu-dropdown-wrapper menu-user">
+                                <a><div><i class="las la-user-tie"></i></div></a>
+                                <div class="menu-dropdown menu-dropdown-right menu-dropdown-push-right">
+                                    <div class="arrow arrow-right"></div> 
+                                    <div class="menu-dropdown-inner">
+                                        <div class="menu-dropdown-head pb-3">
+                                            <div class="tbl-cell">
+                                                {% if common.user.picture %}
+                                                <img src="public/uploads/{{ common.user.picture }}">
+                                                {% else %}
+                                                <i class="las la-user-tie"></i>
+                                                {% endif %}
+                                            </div>
+                                            <div class="tbl-cell pl-2 text-left">
+                                                <p class="m-0 font-18">{{ common.user.firstname }}{{ common.user.lastname }}</p>
+                                                <p class="m-0 font-14">{{ common.user.role }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="menu-dropdown-body">
+                                            <ul class="menu-nav">
+                                                <li><a href="{{ common.info.url_route }}profile"><i class="las la-id-badge"></i><span>Profile</span></a></li>
+                                                <li><a href="{{ common.info.url_route }}profile"><i class="las la-key"></i><span>Change Password</span></a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="menu-dropdown-footer text-right">
+                                            <a href="{{ common.info.url_route }}logout" class="btn btn-outline btn-primary btn-pill btn-outline-2x font-12 btn-sm">Logout</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="page-hdr-mobile">
+                            <div class="page-menu open-mobile-search">
+                                <a href="#"><i class="las la-search"></i></a>
+                            </div>
+                            <div class="page-menu open-left-menu">
+                                <a href="#"><i class="las la-bars"></i></a>
+                            </div>
+                            <div class="page-menu open-page-menu-desktop">
+                                <a href="#"><i class="las la-ellipsis-h"></i></a>
+                            </div>
+                        </div>
+                        <input type="hidden" class="common_date_format" value="{{ common.info.picker_date_format }}">
+                        <input type="hidden" class="common_date_my_format" value="{{ common.info.picker_my_format }}">
+                        <input type="hidden" class="common_daterange_format" value="{{ common.info.range_date_format }}">
+                        <input type="hidden" class="common_daterange_my_format" value="{{ common.info.range_my_format }}">
+                        <input type="hidden" class="common_currency" value="{{ common.info.currency_abbr }}">
+                        <input type="hidden" class="site_url" value="{{ common.info.url_route }}">
+                        <input type="hidden" class="s_token" value="{{ common.token }}">
+                    </div>
+                </div>
+            </div>
+            <div class="page-wrapper">
+                <div class="page-body">
+                    {% endautoescape %}
