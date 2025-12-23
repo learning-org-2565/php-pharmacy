@@ -41,7 +41,9 @@ COPY . /var/www/html/
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
+    && mkdir -p /var/www/html/public/uploads \
     && chmod -R 777 /var/www/html/public/uploads \
+    && touch /var/www/html/error.log \
     && chmod 666 /var/www/html/error.log
 
 # Install PHP dependencies if composer.json exists
